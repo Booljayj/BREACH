@@ -8,6 +8,8 @@
 *.csproj
 *.unityproj
 *.sln
+*.pidb
+*.userprefs
 
 # For mac
 .DS_Store
