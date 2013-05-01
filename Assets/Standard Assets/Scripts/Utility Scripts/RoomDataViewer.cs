@@ -2,7 +2,7 @@ using UnityEngine;
 using System.Collections;
 
 public class RoomDataViewer : MonoBehaviour {
-	Room room;
+	Atmosphere atmos;
 	public TextMesh tmesh;
 	public Font font;
 	
@@ -10,8 +10,8 @@ public class RoomDataViewer : MonoBehaviour {
 	
 	// Use this for initialization
 	void Start () {
-		if (room == null) {
-			room = GetComponent<Room>();
+		if (atmos == null) {
+			atmos = GetComponent<Atmosphere>();
 		}
 		
 		if (tmesh == null) {
@@ -23,7 +23,7 @@ public class RoomDataViewer : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-		tmesh.text = "P: "+room.Pressure.ToString()+"\nT: "+room.Temperature.ToString();
+		tmesh.text = "P: "+atmos.Pressure.ToString()+"\nT: "+atmos.Temperature.ToString();
 	}
 }
 
