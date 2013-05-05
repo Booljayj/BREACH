@@ -13,3 +13,5 @@
 
 # For mac
 .DS_Store
+.~lock*
+*gcx

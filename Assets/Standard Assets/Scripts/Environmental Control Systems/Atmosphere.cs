@@ -90,28 +90,35 @@ public class Atmosphere : MonoBehaviour {
 	}
 	
 	//retrieve a packet of gas and heat from this atmosphere, with a mass total up to but not exceeding "amount".
-	public void PullMassPacket(float amount, out Gases outGas, out float outHeat) {
+	public void PullMassPacket(float amount, out Gases outMass, out float outHeat) {
 		float ratio = amount / Mass.Total; //ratio of "what we're taking" over "what we have"
+		float takenMass, takenHeat;
 		
 		if (ratio > 1) { //trying to pull more than we have, so just give it all.
-			outGas = _mass;
-			outHeat = _heat;
+			takenMass = _mass;
+			takenHeat = _heat;
 			
 			_mass = new Gases();
 			_heat = 0;
 		} else {
-			outGas = _mass*ratio;
-			outHeat = _heat*ratio;
+			takenMass = _mass*ratio;
+			takenHeat = _heat*ratio;
 			
-			_mass -= outGas;
-			_heat -= outHeat;
+			_mass -= takenMass;
+			_heat -= takenHeat;
 		}
+		
+		outMass += takenMass;
+		outHeat += takenHeat;
 	}
 	
 	//deposit some mass and heat into this atmosphere.
-	public void PushMassPacket(Gases gas, float heat) {
+	public void PushMassPacket(out Gases gas, out float heat) {
 		_mass += gas;
 		_heat += heat;
+		
+		gas = new Gases();
+		heat = 0;
 		
 		CalculateProperties();
 	}
