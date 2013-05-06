@@ -90,9 +90,10 @@ public class Atmosphere : MonoBehaviour {
 	}
 	
 	//retrieve a packet of gas and heat from this atmosphere, with a mass total up to but not exceeding "amount".
-	public void PullMassPacket(float amount, out Gases outMass, out float outHeat) {
+	public void PullMassPacket(float amount, ref Gases outMass, ref float outHeat) {
 		float ratio = amount / Mass.Total; //ratio of "what we're taking" over "what we have"
-		float takenMass, takenHeat;
+		Gases takenMass;
+		float takenHeat;
 		
 		if (ratio > 1) { //trying to pull more than we have, so just give it all.
 			takenMass = _mass;
@@ -112,8 +113,38 @@ public class Atmosphere : MonoBehaviour {
 		outHeat += takenHeat;
 	}
 	
+	public void PullMass (float amount, ref Gases outMass) {
+		float ratio = amount / Mass.Total;
+		Gases takenMass;
+		
+		if (ratio > 1) {
+			takenMass = _mass;
+			_mass = new Gases();
+		} else {
+			takenMass = _mass*ratio;
+			_mass -= takenMass;
+		}
+		
+		outMass += takenMass;
+	}
+	
+	public void PullHeat (float amount, ref float outHeat) {
+		float ratio = amount / Heat;
+		float takenHeat;
+		
+		if (ratio > 1) {
+			takenHeat = _heat;
+			_heat = 0;
+		} else {
+			takenHeat = amount;
+			_heat -= amount;
+		}
+		
+		outHeat += takenHeat;
+	}
+	
 	//deposit some mass and heat into this atmosphere.
-	public void PushMassPacket(out Gases gas, out float heat) {
+	public void PushMassPacket(ref Gases gas, ref float heat) {
 		_mass += gas;
 		_heat += heat;
 		
@@ -121,5 +152,35 @@ public class Atmosphere : MonoBehaviour {
 		heat = 0;
 		
 		CalculateProperties();
+	}
+	
+	public void PushMass(ref Gases inMass) {
+		_mass += inMass;
+		inMass = new Gases();
+		
+		CalculateProperties();
+	}
+	
+	public void PushHeat(ref float inHeat) {
+		_heat += inHeat;
+		inHeat = 0;
+	}
+	
+	public Gases GetGases (Gases gas) {
+		if (gas.N2 > _mass.N2) gas.N2 = _mass.N2;
+		if (gas.O2 > _mass.O2) gas.O2 = _mass.O2;
+		if (gas.CO2 > _mass.CO2) gas.CO2 = _mass.CO2;
+		if (gas.CO > _mass.CO) gas.CO = _mass.CO;
+		if (gas.CH4 > _mass.CH4) gas.CH4 = _mass.CH4;
+		if (gas.NOX > _mass.NOX) gas.NOX = _mass.NOX;
+		return gas;
+	}
+	
+	public float GetHeat (float amount) {
+		if (amount >= _heat) {
+			return _heat;
+		} else {
+			return amount;
+		}
 	}
 }

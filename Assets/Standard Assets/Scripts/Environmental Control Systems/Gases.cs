@@ -27,6 +27,21 @@ public class Gases {
 		get {return Mathf.Abs(N2)+Mathf.Abs(O2)+Mathf.Abs(CO2)+Mathf.Abs(CO)+Mathf.Abs(CH4)+Mathf.Abs(NOX);}
 	}
 	
+	public float PTotal {
+		get {float t = 0;
+			if (N2 > 0) t += N2;
+			if (O2 > 0) t += O2;
+			if (CO2 > 0) t += CO2;
+			if (CO > 0) t += CO;
+			if (CH4 > 0) t += CH4;
+			if (NOX > 0) t += NOX;
+			return t;
+		}
+	}
+	public float NTotal {
+		get {return (this*-1f).PTotal;}
+	}
+	
 	public Gases () {}
 	public Gases (float N2, float O2, float CO2, float CO, float CH4, float NOX) {
 		this.N2 = N2;
