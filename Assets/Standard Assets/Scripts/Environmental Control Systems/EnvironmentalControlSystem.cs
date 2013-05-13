@@ -10,18 +10,22 @@ public class EnvironmentalControlSystem : MonoBehaviour {
 	public List<GasTankHolder> carbondioxide; //tanks filled with carbon dioxide (CO2). This is a staging area for the scrubber.
 	public List<ScrubberTankHolder> scrubbers;
 	
-	public float gasExchangeRate; //rate of gas exchange, in kg/s
-	public float gasScrubRate; //rate of O2 scrubbing, in kg/s
-	public float idealPressure = 80000f; //80 kPa is good for now
-	public float idealTemperature = 293f; //20 C is good for now
-	public Gases idealPercent = new Gases(.75f, .25f, 0f,0f,0f,0f); //slightly high-O2 envir
-	public float tolerance = .05f; //tolerance for ideals
+	public AnimationCurve intakeCurve = new AnimationCurve(new Keyframe(idealPressure, gasExchangeRate), new Keyframe(0, 0));
+	public AnimationCurve outputCurve = new AnimationCurve(new Keyframe(0, gasExchangeRate), new Keyframe(idealPressure, 0));
 	
-	public AnimationCurve intakeCurve;// = new AnimationCurve(new Keyframe(idealPressure, gasExchangeRate));
-	public AnimationCurve outputCurve;// = new AnimationCurve(new Keyframe(idealPressure, gasExchangeRate));
+	public bool ventExcess;
 	
-	private Gases massPacket;
-	private Gases idealPacket;
+	public float O2percent_ideal = .2f;
+	public float pressure_ideal = 80000f;
+	public float temp_ideal = 293f;
+	
+	private Gases percent_ideal;
+	private Gases mass_ideal;
+	
+	private Gases dm_ideal; //ideal mass movement
+	private Gases dm; //mass out, to the room
+	private float dQ_ideal; //mass in, from the room
+	private float dQ; //mass out, from the room
 	
 	// Use this for initialization
 	void Start () {
@@ -29,30 +33,69 @@ public class EnvironmentalControlSystem : MonoBehaviour {
 	
 	//TODO: Not functional. Fix that.
 	void Update() {
-		foreach (Atmosphere atmos in rooms) {
-			// ga-damn the solution to this problem is simple. I wasn't thinking about how real-world systems work
+		foreach (Atmosphere room in rooms) {
+			//create the gases object with percentages
+			percent_ideal = new Gases(1f-O2percent_ideal, O2percent_ideal, 0,0,0,0);
 			
-			//step 1: pull gases from the room. Pull more or less based on the current pressure of the room.
-			//massPacket = atmos.GetMassPacket(intakeCurve.Evaluate(atmos.Pressure));
+			//determine the ideal mass and heat transfers. P = mRT/V
+			mass_ideal = pressure_ideal*room.Volume/(temp_ideal*percent_ideal.R);
 			
-			//step 2: throw retrieved gases into the tanks
-			nitrogen[0].tank.atmos.Mass.N2 += massPacket.N2;
-			oxygen[0].tank.atmos.Mass.O2 += massPacket.O2;
-			carbondioxide[0].tank.atmos.Mass.CO2 += massPacket.CO2;
+			//find the ideal mass output of the ECS
+			dm_ideal = mass_ideal*outputCurve.Evaluate(room.Pressure)*Time.deltaTime;
 			
-			//step 4: prepare output gas packet. Push more of less based on the current pressure of the room.
-			idealPacket = idealPercent*outputCurve.Evaluate(atmos.Pressure);
+			//pull some mass from the room
+			dm = room.Percent*intakeCurve.Evaluate(room.Pressure)*Time.deltaTime;
+			dm = room.GetGases(dm);
+			room.Mass -= dm;
 			
-			//step 5: fill output packet with available gas pulled from tanks. Tanks may or may not be pure.
-			massPacket = new Gases();
-			//massPacket += nitrogen[0].tank.atmos.GetMassPacket(idealPacket.N2);
-			//massPacket += oxygen[0].tank.atmos.GetMassPacket(idealPacket.O2);
+			//remove toxins
+			dm.CO = 0; dm.CH4 = 0; dm.NOX = 0;
 			
-			//step 6: give mass packet to room atmosphere
-			atmos.Mass += massPacket;
+			//remove carbon dioxide
+			foreach (GasTankHolder tankHolder in carbondioxide) {
+				if (Mathf.Approximately(dm.CO2, 0f)) break;
+				
+				dm.CO2 = tankHolder.tank.PushGas(dm.CO2, GasType.CarbonDioxide);
+			}
+			dm.CO2 = 0; //vent excess/ensure zero
 			
-			//step 7: mass packet is at ideal temperature, so give that much heat to atmos.
-			atmos.Heat += Atmosphere.CalculateHeatCapacity(massPacket)*idealTemperature;
+			//add or remove nitrogen
+			foreach (GasTankHolder tankHolder in nitrogen) {
+				if (dm.N2 > dm_ideal.N2) {
+					dm.N2 = tankHolder.tank.PushGas(dm.N2 - dm_ideal.N2, GasType.Nitrogen);
+				} else if (dm.N2 < dm_ideal.N2) {
+					dm.N2 = tankHolder.tank.PullGas(dm_ideal.N2 - dm.N2, GasType.Nitrogen);
+				} else {
+					break;
+				}
+			}
+			
+			//add or remove oxygen
+			foreach (GasTankHolder tankHolder in oxygen) {
+				if (dm.O2 > dm_ideal.O2) {
+					dm.O2 = tankHolder.tank.PushGas(dm.O2 - dm_ideal.O2, GasType.Oxygen);
+				} else if (dm.O2 < dm_ideal.O2) {
+					dm.O2 = tankHolder.tank.PullGas(dm_ideal.O2 - dm.O2, GasType.Oxygen);
+				} else {
+					break;
+				}
+			
+			
+			//perform the intake step
+			dm_i = room.Percent*intakeCurve.Evaluate(room.Pressure);
+			dm_i = room.PullMass(dm_i);
+			dQ_i = room.Heat*dm_i.Total/room.Mass.Total;
+			
+			//sort intake into various tanks
+			foreach (GasTankHolder tankHolder in nitrogen) {
+				dm_i.N2 = tankHolder.tank.PushGas(dm_i.N2, GasType.Nitrogen);
+			}
+			foreach (GasTankHolder tankHolder in oxygen) {
+				dm_i.O2 = tankHolder.tank.PushGas(dm_i.O2, GasType.Oxygen);
+			}
+			foreach (GasTankHolder tankHolder in carbondioxide) {
+				dm_i.CO2 = tankHolder.tank.PushGas(dm_i.CO2, GasType.CarbonDioxide);
+			}
 		}
 	}
 }

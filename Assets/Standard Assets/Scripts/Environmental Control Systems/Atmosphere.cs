@@ -72,8 +72,8 @@ public class Atmosphere : MonoBehaviour {
 	
 	public void CalculateProperties() {
 		//calculate values using the ideal gas law for mixtures: P = R_total * T / V
-		R = (_mass.N2*296.8f + _mass.O2*259.8f + _mass.CO2*188.9f + _mass.CO*297f + _mass.CH4*518.3f); //individual R values are all in J/kg*K
-		C_p = (_mass.N2*1.04f + _mass.O2*.919f + _mass.CO2*.844f + _mass.CO*1.02f + _mass.CH4*2.22f)/1000f; //individual c_p values are all in kJ/kg*K
+		R = _mass.R; //individual R values are all in J/kg*K
+		C_p = _mass.C_p; //individual c_p values are all in kJ/kg*K
 		
 		//calculate percentages
 		float masstotal = _mass.Total;

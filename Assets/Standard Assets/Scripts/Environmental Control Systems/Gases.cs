@@ -5,6 +5,8 @@ public enum GasType {
 	Nitrogen,
 	Oxygen,
 	CarbonDioxide,
+	WaterVapor,
+	
 	CarbonMonoxide,
 	Methane,
 	NitrousOxides,
@@ -27,19 +29,23 @@ public class Gases {
 		get {return Mathf.Abs(N2)+Mathf.Abs(O2)+Mathf.Abs(CO2)+Mathf.Abs(CO)+Mathf.Abs(CH4)+Mathf.Abs(NOX);}
 	}
 	
-	public float PTotal {
-		get {float t = 0;
-			if (N2 > 0) t += N2;
-			if (O2 > 0) t += O2;
-			if (CO2 > 0) t += CO2;
-			if (CO > 0) t += CO;
-			if (CH4 > 0) t += CH4;
-			if (NOX > 0) t += NOX;
-			return t;
+	public Gases Positives {
+		get {return new Gases(
+				N2 > 0 ? N2 : 0,
+				O2 > 0 ? O2 : 0,
+				CO2 > 0 ? CO2 : 0,
+				CO > 0 ? CO : 0,
+				CH4 > 0 ? CH4 : 0,
+				NOX > 0 ? NOX : 0);
 		}
 	}
-	public float NTotal {
-		get {return (this*-1f).PTotal;}
+	
+	public float R {
+		get {return (N2*296.8f + O2*259.8f + CO2*188.9f + CO*297f + CH4*518.3f);}//individual R values are all in J/kg*K
+	}
+	
+	public float C_p {
+		get {return (N2*1.04f + O2*.919f + CO2*.844f + CO*1.02f + CH4*2.22f)/1000f;}//individual c_p values are all in kJ/kg*K
 	}
 	
 	public Gases () {}
@@ -106,12 +112,7 @@ public class Gases {
 			A.NOX+B.NOX);
 	}
 	public static Gases operator - (Gases A, Gases B) {
-		return new Gases(A.N2-B.N2,
-			A.O2-B.O2,
-			A.CO2-B.CO2,
-			A.CO-B.CO,
-			A.CH4-B.CH4,
-			A.NOX-B.NOX);
+		return A+(B*-1f);
 	}
 	public static Gases operator * (Gases g, float s) {
 		return new Gases(g.N2*s,
@@ -121,6 +122,9 @@ public class Gases {
 			g.CH4*s,
 			g.NOX*s);
 	}
+	public static Gases operator * (float s, Gases g) {
+		return g*s;
+	}
 	public static Gases operator / (Gases g, float s) {
 		return new Gases(g.N2/s,
 			g.O2/s,
@@ -128,6 +132,28 @@ public class Gases {
 			g.CO/s,
 			g.CH4/s,
 			g.NOX/s);
+	}
+	
+	public void Zero () {
+		N2 = 0;
+		O2 = 0;
+		CO2 = 0;
+		CO = 0;
+		CH4 = 0;
+		NOX = 0;
+	}
+	
+	public static bool Approximately (Gases g1, Gases g2) {
+		if (Mathf.Approximately(g1.N2, g2.N2) &&
+			Mathf.Approximately(g1.O2, g2.O2) &&
+			Mathf.Approximately(g1.CO2, g2.CO2) &&
+			Mathf.Approximately(g1.CO, g2.CO) &&
+			Mathf.Approximately(g1.CH4, g2.CH4) &&
+			Mathf.Approximately(g1.NOX, g2.NOX)) {
+			return true;
+		} else {
+			return false;
+		}
 	}
 }
 
