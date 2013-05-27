@@ -14,15 +14,15 @@ public class Airlock : MonoBehaviour {
 	//===Calculation variables
 	private Atmosphere A1, A2;
 	
-	private float Y;
+	private float Y; //expansion factor
 	private float T; //difference factor
 	private float mdot;
 	
 	private float rhobar;
-	private float D;
+	private float D; //adjusted diffusion factor
 	private Gases J;
 	
-	private float E;
+	private float E; //combined property factor
 	private float hbar;
 	private float Qdot;
 	
@@ -68,6 +68,8 @@ public class Airlock : MonoBehaviour {
 				//calculate and add in the diffusion mass flow rate J
 				dm = dm + (A1.Percent - A2.Percent)*height*width*rhobar*D*Time.deltaTime;
 			}
+			
+			//TODO: Room for improvement here
 			
 			//Mass-driven heat transfer
 			if (!Mathf.Approximately(dm.AbsTotal, 0)) {

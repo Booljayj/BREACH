@@ -13,10 +13,11 @@ public enum GasType {
 }
 
 [System.SerializableAttribute]
-public class Gases {
+public class Gases : IEnumerable { //TODO: Implement IEnumerable
 	public float N2;
 	public float O2;
 	public float CO2;
+	public float H2O;
 	
 	public float CO;
 	public float CH4;
@@ -134,7 +135,7 @@ public class Gases {
 			g.NOX/s);
 	}
 	
-	public void Zero () {
+	public void Zero() {
 		N2 = 0;
 		O2 = 0;
 		CO2 = 0;
