@@ -24,6 +24,7 @@ public class EnvironmentalControlSystem : MonoBehaviour {
 	
 	private Gases dm_ideal; //ideal mass movement
 	private Gases dm; //mass out, to the room
+	private Gases N,O,C,T; //transport vectors
 	private float dQ_ideal; //mass in, from the room
 	private float dQ; //mass out, from the room
 	
@@ -36,9 +37,10 @@ public class EnvironmentalControlSystem : MonoBehaviour {
 		foreach (Atmosphere room in rooms) {
 			//create the gases object with percentages
 			percent_ideal = new Gases(1f-O2percent_ideal, O2percent_ideal, 0,0,0,0);
+			float Rideal = Atmosphere.CalculateIdealConstant(percent_ideal);
 			
 			//determine the ideal mass and heat transfers. P = mRT/V
-			mass_ideal = percent_ideal*pressure_ideal*room.Volume/(temp_ideal*percent_ideal.R);
+			mass_ideal = percent_ideal*pressure_ideal*room.Volume/(temp_ideal*Rideal);
 			
 			//find the ideal mass output of the ECS
 			dm_ideal = mass_ideal*outputCurve.Evaluate(room.Pressure)*Time.deltaTime;
@@ -48,55 +50,97 @@ public class EnvironmentalControlSystem : MonoBehaviour {
 			dm = room.GetGases(dm);
 			room.Mass -= dm;
 			
-			//remove toxins
-			dm.CO = 0; dm.CH4 = 0; dm.NOX = 0;
+			//separate gases into vectors
+			N = new Gases(dm.N2, 0,0,0,0,0);
+			O = new Gases(0, dm.O2, 0,0,0,0);
+			C = new Gases(0,0, dm.CO2, 0,0,0);
+			T = new Gases(0,0,0, dm.CO, dm.CH4, dm.NOX);
 			
-			//remove carbon dioxide
-			foreach (GasTankHolder tankHolder in carbondioxide) {
-				if (Mathf.Approximately(dm.CO2, 0f)) break;
-				
-				dm.CO2 = tankHolder.tank.PushGas(dm.CO2, GasType.CarbonDioxide);
-			}
-			dm.CO2 = 0; //vent excess/ensure zero
+			//vent toxins
+			T = new Gases();
 			
-			//add or remove nitrogen
-			foreach (GasTankHolder tankHolder in nitrogen) {
-				if (dm.N2 > dm_ideal.N2) {
-					dm.N2 = tankHolder.tank.PushGas(dm.N2 - dm_ideal.N2, GasType.Nitrogen);
-				} else if (dm.N2 < dm_ideal.N2) {
-					dm.N2 = tankHolder.tank.PullGas(dm_ideal.N2 - dm.N2, GasType.Nitrogen);
-				} else {
-					break;
-				}
-			}
+			//shift N towards ideal amount
+			N = ModGas(N, new Gases(dm_ideal.N2, 0,0,0,0,0), GasType.Nitrogen);
 			
-			//add or remove oxygen
-			foreach (GasTankHolder tankHolder in oxygen) {
-				if (dm.O2 > dm_ideal.O2) {
-					dm.O2 = tankHolder.tank.PushGas(dm.O2 - dm_ideal.O2, GasType.Oxygen);
-				} else if (dm.O2 < dm_ideal.O2) {
-					dm.O2 = tankHolder.tank.PullGas(dm_ideal.O2 - dm.O2, GasType.Oxygen);
-				} else {
-					break;
-				}
-			}
+			//shift O towards ideal amount
+			O = ModGas(O, new Gases(0, dm_ideal.O2, 0,0,0,0), GasType.Oxygen);
+			
+			//shift CO2 towards ideal damount
+			C = ModGas(C, new Gases(), GasType.CarbonDioxide);
+			
+			//vent CO2
+			C = new Gases();
+			
+			//return modified gases to the room
+			room.Mass += (N+O+C+T);
 			
 			
-//			//perform the intake step
-//			dm_i = room.Percent*intakeCurve.Evaluate(room.Pressure);
-//			dm_i = room.PullMass(dm_i);
-//			dQ_i = room.Heat*dm_i.Total/room.Mass.Total;
-//			
-//			//sort intake into various tanks
-//			foreach (GasTankHolder tankHolder in nitrogen) {
-//				dm_i.N2 = tankHolder.tank.PushGas(dm_i.N2, GasType.Nitrogen);
-//			}
-//			foreach (GasTankHolder tankHolder in oxygen) {
-//				dm_i.O2 = tankHolder.tank.PushGas(dm_i.O2, GasType.Oxygen);
-//			}
-//			foreach (GasTankHolder tankHolder in carbondioxide) {
-//				dm_i.CO2 = tankHolder.tank.PushGas(dm_i.CO2, GasType.CarbonDioxide);
-//			}
+			//=====HEAT
 		}
+	}
+	
+	private void InStep(Atmosphere A, ref Gases gas) {
+		//pull a certain volume of gas from the room
+		//float dV = .1f; //m^3
+		
+		//Gases dm = A.PullMass(dV*A.GasDensity);
+		
+		//separate the gas using the Mass Cyclometer into N,O,C,T
+		
+		//vent T to space
+		
+		//push N to tanks
+		
+		//push O to tanks
+		
+		//push C to tanks
+		//vent remaining C if set
+		
+		//return remainder gases
+	}
+	
+	private void OutStep(Atmosphere A, ref Gases gas) {
+		//calculate nominal values
+		
+		//move N to nominal, venting if necessary
+		
+		//move O to nominal, venting if necessary
+		
+		//add N,O, and C, return to room
+	}
+	
+	private Gases ModGas(Gases m, Gases m_ideal, GasType type) {
+		List<GasTankHolder> list = new List<GasTankHolder>();
+		Gases m_out = new Gases();
+		
+		switch (type) {
+		case GasType.Nitrogen:
+			list = nitrogen;
+			break;
+		case GasType.Oxygen:
+			list = oxygen;
+			break;
+		case GasType.CarbonDioxide:
+			list = carbondioxide;
+			break;
+		}
+		
+		foreach (GasTankHolder holder in list) {
+			if (Mathf.Approximately(m.Total, m_ideal.Total)) {
+				continue;
+				
+			} else if (m.Total > m_ideal.Total) { //we need to lower m;
+				m_out = m_ideal; //we assume a perfect transfer.
+				m_out += holder.tank.Push(m - m_ideal); //push excess into the tank, return remainder
+				m = m_out; //set up for the next loop from this point
+				
+			} else { //we need to raise m;
+				m_out = m; //we assume no pull occurred
+				m_out += holder.tank.Pull(m_ideal.Total - m.Total); //pull addition from tank
+				m = m_out; //set up for the next loop from this point
+			}
+		}
+		
+		return m_out;
 	}
 }

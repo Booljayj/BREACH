@@ -13,7 +13,7 @@ public enum GasType {
 }
 
 [System.SerializableAttribute]
-public class Gases : IEnumerable { //TODO: Implement IEnumerable
+public class Gases {
 	public float N2;
 	public float O2;
 	public float CO2;
@@ -39,14 +39,6 @@ public class Gases : IEnumerable { //TODO: Implement IEnumerable
 				CH4 > 0 ? CH4 : 0,
 				NOX > 0 ? NOX : 0);
 		}
-	}
-	
-	public float R {
-		get {return (N2*296.8f + O2*259.8f + CO2*188.9f + CO*297f + CH4*518.3f);}//individual R values are all in J/kg*K
-	}
-	
-	public float C_p {
-		get {return (N2*1.04f + O2*.919f + CO2*.844f + CO*1.02f + CH4*2.22f)/1000f;}//individual c_p values are all in kJ/kg*K
 	}
 	
 	public Gases () {}
@@ -157,4 +149,3 @@ public class Gases : IEnumerable { //TODO: Implement IEnumerable
 		}
 	}
 }
-
