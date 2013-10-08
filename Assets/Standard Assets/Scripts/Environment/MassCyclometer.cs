@@ -53,7 +53,7 @@ public class MassCyclometer : MonoBehaviour {
 			Debug.LogError(string.Format("Invalid Error or Tolerance: {0}, {1}", error, tolerance));
 		}
 		
-		x[0] = Random.Range(1f-error); //this represents the r-value, or the value for the desired gas
+		x[0] = Random.Range(1f-error, 1f); //this represents the r-value, or the value for the desired gas
 		c = 1-x[0]; //this represents the remainder for the sum of values to equal 1
 		for (int i = 1; i < 3; i++) {
 			if (c <= tolerance) { //simplify calculation for very small c-values
