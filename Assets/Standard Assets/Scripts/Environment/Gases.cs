@@ -2,7 +2,7 @@ using UnityEngine;
 using System.Collections;
 
 public enum GasType {
-	Nitrogen,
+	Nitrogen = 0,
 	Oxygen,
 	CarbonDioxide,
 	WaterVapor,

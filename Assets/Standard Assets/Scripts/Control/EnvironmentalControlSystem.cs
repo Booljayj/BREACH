@@ -3,22 +3,27 @@ using System.Collections;
 using System.Collections.Generic;
 
 public class EnvironmentalControlSystem : MonoBehaviour {
-	public List<Atmosphere> rooms;
+	//structures ===============
+	public List<Atmosphere> atmospheres;
 	
-	public List<GasTankHolder> nitrogen; //tanks filled with nitrogen (N2).
-	public List<GasTankHolder> oxygen; //tanks filled with oxygen (O2).
-	public List<GasTankHolder> carbondioxide; //tanks filled with carbon dioxide (CO2). This is a staging area for the scrubber.
-	public List<ScrubberTankHolder> scrubbers;
+	public List<GasTankHolder> nitrogenTanks; //tanks filled with nitrogen (N2).
+	public List<GasTankHolder> oxygenTanks; //tanks filled with oxygen (O2).
+	public List<GasTankHolder> carbonTanks; //tanks filled with carbon dioxide (CO2). This is a staging area for the scrubber.
+	public List<GasTankHolder> toxinTanks; //tanks filled with toxic chemicals.
 	
-	public AnimationCurve intakeCurve = new AnimationCurve();//new Keyframe(idealPressure, gasExchangeRate), new Keyframe(0, 0));
-	public AnimationCurve outputCurve = new AnimationCurve();//new Keyframe(0, gasExchangeRate), new Keyframe(idealPressure, 0));
+	public List<ScrubberTankHolder> scrubbers; //CO2 scrubbers
 	
-	public bool ventExcess;
+	public MassCyclometer cyclometer; //the mass cyclometer which separates input gases
+	
+	//settings ==================
+	public AnimationCurve intakeCurve = new AnimationCurve(new Keyframe(0,0), new Keyframe(80000, 100f), new Keyframe(2*80000, 200f));
+	public AnimationCurve outputCurve = new AnimationCurve(new Keyframe(0, 200f), new Keyframe(80000, 100f), new Keyframe(2*80000, 0f));
 	
 	public float O2percent_ideal = .2f;
 	public float pressure_ideal = 80000f;
 	public float temp_ideal = 293f;
 	
+	//variables =================
 	private Gases percent_ideal = new Gases();
 	private Gases mass_ideal = new Gases();
 	
@@ -28,27 +33,23 @@ public class EnvironmentalControlSystem : MonoBehaviour {
 	private float dQ_ideal; //mass in, from the room
 	private float dQ; //mass out, from the room
 	
-	// Use this for initialization
-	void Start () {
-	}
-	
 	//TODO: Not functional. Fix that.
 	void Update() {
-		foreach (Atmosphere room in rooms) {
+		foreach (Atmosphere atmosphere in atmospheres) {
 			//create the gases object with percentages
 			percent_ideal = new Gases(1f-O2percent_ideal, O2percent_ideal, 0,0,0,0);
 			float Rideal = Atmosphere.CalculateIdealConstant(percent_ideal);
 			
 			//determine the ideal mass and heat transfers. P = mRT/V
-			mass_ideal = percent_ideal*pressure_ideal*room.Volume/(temp_ideal*Rideal);
+			mass_ideal = percent_ideal*pressure_ideal*atmosphere.Volume/(temp_ideal*Rideal);
 			
 			//find the ideal mass output of the ECS
-			dm_ideal = mass_ideal*outputCurve.Evaluate(room.Pressure)*Time.deltaTime;
+			dm_ideal = mass_ideal*outputCurve.Evaluate(atmosphere.Pressure)*Time.deltaTime;
 			
 			//pull some mass from the room
-			dm = room.Percent*intakeCurve.Evaluate(room.Pressure)*Time.deltaTime;
-			dm = room.GetGases(dm);
-			room.Mass -= dm;
+			dm = atmosphere.Percent*intakeCurve.Evaluate(atmosphere.Pressure)*Time.deltaTime;
+			dm = atmosphere.GetGases(dm);
+			atmosphere.Mass -= dm;
 			
 			//separate gases into vectors
 			N = new Gases(dm.N2, 0,0,0,0,0);
@@ -72,7 +73,7 @@ public class EnvironmentalControlSystem : MonoBehaviour {
 			C = new Gases();
 			
 			//return modified gases to the room
-			room.Mass += (N+O+C+T);
+			atmosphere.Mass += (N+O+C+T);
 			
 			
 			//=====HEAT
@@ -85,13 +86,13 @@ public class EnvironmentalControlSystem : MonoBehaviour {
 		
 		switch (type) {
 		case GasType.Nitrogen:
-			list = nitrogen;
+			list = nitrogenTanks;
 			break;
 		case GasType.Oxygen:
-			list = oxygen;
+			list = oxygenTanks;
 			break;
 		case GasType.CarbonDioxide:
-			list = carbondioxide;
+			list = carbonTanks;
 			break;
 		}
 		
