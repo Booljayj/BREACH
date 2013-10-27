@@ -51,7 +51,7 @@ public class Atmosphere : MonoBehaviour {
 	}
 	
 	public float C_p {
-		get {return (_mass.N2*1.04f + _mass.O2*.919f + _mass.CO2*.844f + _mass.CO*1.02f + _mass.CH4*2.22f)/1000f;}//individual c_p values are all in kJ/kg*K, returns J/kg*K
+		get {return (_mass.N2*1.04f + _mass.O2*.919f + _mass.CO2*.844f + _mass.CO*1.02f + _mass.CH4*2.22f)/1000f;}//individual c_p values are all in kJ/kg*K, returns MJ/kg*K
 	}
 	
 	public float Temperature { //K

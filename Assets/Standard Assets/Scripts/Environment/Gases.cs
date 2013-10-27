@@ -5,11 +5,12 @@ public enum GasType {
 	Nitrogen = 0,
 	Oxygen,
 	CarbonDioxide,
-	WaterVapor,
 	
 	CarbonMonoxide,
 	Methane,
 	NitrousOxides,
+	
+	Null = 256
 }
 
 [System.SerializableAttribute]
@@ -92,6 +93,9 @@ public class Gases {
 				CH4 = value; break;
 			case GasType.NitrousOxides:
 				NOX = value; break;
+			default:
+				Debug.LogError("The fuck are you setting a null gas for, dumbass?");
+				break;
 			}
 		}
 	}

@@ -7,6 +7,14 @@ public enum GasTankState {
 	Full,
 }
 
+public enum GasTankType {
+	Null = 0,
+	Nitrogen,
+	Oxygen,
+	Carbon,
+	Toxin,
+}
+
 public class GasTank : MonoBehaviour {
 	public Atmosphere atmosphere;
 	public Valve valve;
@@ -29,9 +37,7 @@ public class GasTank : MonoBehaviour {
 		atmosphere = GetComponent<Atmosphere>();
 	}
 	
-	void Update () {
-		//pure = (atmos.Percent[gastype] >= .9999f) ? true : false;
-		
+	void Update () {		
 		if (atmosphere.Pressure > maxPressure) {
 			valve.open = true;
 		} else {
