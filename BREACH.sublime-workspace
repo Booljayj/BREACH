@@ -1,0 +1,273 @@
+{
+	"auto_complete":
+	{
+		"selected_items":
+		[
+			[
+				"sy",
+				"System"
+			]
+		]
+	},
+	"buffers":
+	[
+		{
+			"file": "Assets/Standard Assets/Scripts/Environment/AtmosphereBeta.cs",
+			"settings":
+			{
+				"buffer_size": 7068,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "Assets/Standard Assets/Scripts/Mechanics/Airlock.cs",
+			"settings":
+			{
+				"buffer_size": 3859,
+				"line_ending": "Unix"
+			}
+		}
+	],
+	"build_system": "",
+	"command_palette":
+	{
+		"height": 167.0,
+		"selected_items":
+		[
+			[
+				"instal",
+				"Package Control: Install Package"
+			],
+			[
+				"gist",
+				"Gist: Insert Gist"
+			],
+			[
+				"gis",
+				"Gist: Open Gist"
+			],
+			[
+				"inst",
+				"Package Control: Install Package"
+			],
+			[
+				"gpl",
+				"Licence Snippet: GPLv2"
+			],
+			[
+				"remov",
+				"Package Control: Remove Package"
+			],
+			[
+				"snippet",
+				"Snippet: other"
+			],
+			[
+				"side",
+				"View: Toggle Side Bar"
+			],
+			[
+				"sideb",
+				"View: Toggle Side Bar"
+			]
+		],
+		"width": 580.0
+	},
+	"console":
+	{
+		"height": 125.0
+	},
+	"distraction_free":
+	{
+		"menu_visible": true,
+		"show_minimap": false,
+		"show_open_files": false,
+		"show_tabs": false,
+		"side_bar_visible": false,
+		"status_bar_visible": false
+	},
+	"file_history":
+	[
+		"/Users/justin/Projects/BREACH/README.md",
+		"/Users/justin/Library/Application Support/Sublime Text 2/Packages/User/Gist.sublime-settings",
+		"/Users/justin/Library/Application Support/Sublime Text 2/Packages/User/C#/indexer, this.sublime-snippet",
+		"/Users/justin/Projects/BREACH/Assets/Standard Assets/Scripts/Control/EnvironmentalControlSystem.cs",
+		"/Users/justin/Projects/BREACH/Assets/Standard Assets/DefaultShip.blend",
+		"/Users/justin/Library/Application Support/Sublime Text 2/Packages/User/Preferences.sublime-settings",
+		"/Users/justin/Library/Application Support/Sublime Text 2/Packages/User/Distraction Free.sublime-settings",
+		"/Users/justin/Library/Application Support/Sublime Text 2/Packages/Default/Preferences.sublime-settings",
+		"/Users/justin/Projects/BREACH/Assets/Standard Assets/Character Controllers/3rd Person Controller.prefab",
+		"/Users/justin/Projects/BREACH/Assets/Standard Assets/Scripts/Mechanics/GasTank.cs",
+		"/Users/justin/Projects/BREACH/Assets/Standard Assets/Scripts/Mechanics/Valve.cs",
+		"/Users/justin/Projects/BREACH/Assets/Standard Assets/Scripts/Environment/AtmosphereBeta.cs",
+		"/Users/justin/Projects/BREACH/Assets/Standard Assets/Scripts/Mechanics/Airlock.cs"
+	],
+	"find":
+	{
+		"height": 0.0
+	},
+	"find_in_files":
+	{
+		"height": 0.0,
+		"where_history":
+		[
+		]
+	},
+	"find_state":
+	{
+		"case_sensitive": false,
+		"find_history":
+		[
+		],
+		"highlight": true,
+		"in_selection": false,
+		"preserve_case": false,
+		"regex": false,
+		"replace_history":
+		[
+		],
+		"reverse": false,
+		"show_context": true,
+		"use_buffer2": true,
+		"whole_word": false,
+		"wrap": true
+	},
+	"groups":
+	[
+		{
+			"selected": 0,
+			"sheets":
+			[
+				{
+					"buffer": 0,
+					"file": "Assets/Standard Assets/Scripts/Environment/AtmosphereBeta.cs",
+					"settings":
+					{
+						"buffer_size": 7068,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								0,
+								0
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/C#/C#.tmLanguage",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				}
+			]
+		},
+		{
+			"selected": 0,
+			"sheets":
+			[
+				{
+					"buffer": 1,
+					"file": "Assets/Standard Assets/Scripts/Mechanics/Airlock.cs",
+					"settings":
+					{
+						"buffer_size": 3859,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								0,
+								0
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/C#/C#.tmLanguage",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				}
+			]
+		}
+	],
+	"incremental_find":
+	{
+		"height": 0.0
+	},
+	"input":
+	{
+		"height": 0.0
+	},
+	"layout":
+	{
+		"cells":
+		[
+			[
+				0,
+				0,
+				1,
+				1
+			],
+			[
+				1,
+				0,
+				2,
+				1
+			]
+		],
+		"cols":
+		[
+			0.0,
+			0.5,
+			1.0
+		],
+		"rows":
+		[
+			0.0,
+			1.0
+		]
+	},
+	"menu_visible": true,
+	"replace":
+	{
+		"height": 0.0
+	},
+	"save_all_on_build": true,
+	"select_file":
+	{
+		"height": 0.0,
+		"selected_items":
+		[
+			[
+				"ecs",
+				"Scripts/Control/EnvironmentalControlSystem.cs"
+			]
+		],
+		"width": 0.0
+	},
+	"select_project":
+	{
+		"height": 0.0,
+		"selected_items":
+		[
+		],
+		"width": 0.0
+	},
+	"show_minimap": true,
+	"show_open_files": false,
+	"show_tabs": true,
+	"side_bar_visible": true,
+	"side_bar_width": 206.0,
+	"status_bar_visible": true
+}
