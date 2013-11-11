@@ -24,7 +24,7 @@ using System.Collections;
 using System.Collections.Generic;
 
 public class AtmosphereBeta : MonoBehaviour {
-	const public PropertyGroup Properties = new PropertyGroup();
+	static public PropertyGroup Properties = new PropertyGroup();
 
 	#region Primary Properties //=================================================================
 	public float Volume {get; set;} // m^3
@@ -183,9 +183,9 @@ public class AtmosphereBeta : MonoBehaviour {
 		else
 			ratio = mass/masstotal;
 
-		foreach (string type in mass.Keys) {
-			this[type] += mass[type]*ratio;
-			mass[type] -= mass[type]*ratio;
+		foreach (string type in Mi.Keys) {
+			this[type] += Mi[type]*ratio;
+			Mi[type] -= Mi[type]*ratio;
 		}
 	}
 	#endregion

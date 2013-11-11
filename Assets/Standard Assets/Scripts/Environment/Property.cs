@@ -18,7 +18,7 @@ public class Property {
 }
 
 public class PropertyGroup {
-	const private Dictionary<string, Property> _properties = new Dictionary<string, Property>(){
+	Dictionary<string, Property> _properties = new Dictionary<string, Property>(){
 		//These are taken at 300K, from the McGraw-Hill Gas Property Tables
 		{"Argon", new Property(39.948f, 0.5203f)},
 		{"CarbonDioxide", new Property(44.01f, 0.846f)},
