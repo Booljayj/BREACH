@@ -109,16 +109,4 @@ public class Airlock : MonoBehaviour {
 			if (debug) Debug.Log("Transfering "+dm.Total.ToString()+"kg and "+dQ.ToString()+"MJ from "+A1.name);
 		}
 	}
-
-	void OnDrawGizmosSelected() {
-		Gizmos.color = Color.blue;
-		Gizmos.DrawLine(RoomA.transform.position+Vector3.up, RoomB.transform.position+Vector3.up);
-
-		if (open) {
-			Gizmos.color = Color.green;
-		} else {
-			Gizmos.color = Color.red;
-		}
-		Gizmos.DrawWireSphere((RoomA.transform.position+RoomB.transform.position)/2f+Vector3.up, .15f);
-	}
 }
