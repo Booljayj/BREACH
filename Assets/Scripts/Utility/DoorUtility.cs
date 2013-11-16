@@ -1,5 +1,5 @@
 //  
-//  GasTankArray.cs
+//  DoorUtility.cs
 //  
 //  Author:
 //       Justin Bool <booljayj@gmail.com>
@@ -18,35 +18,28 @@
 // 
 //  You should have received a copy of the GNU General Public License
 //  along with this program.  If not, see <http://www.gnu.org/licenses/>.
-
 using UnityEngine;
 using System.Collections;
-using System.Collections.Generic;
 
-public class GasTankArray : MonoBehaviour {
-	public List<GasTankHolder> holders;
+public class DoorUtility : MonoBehaviour {
+	public Door door;
 	
-	public Gases Push(Gases gas) {
-		foreach (GasTankHolder holder in holders) {
-			if (holder.tank != null) { //there is a tank in this holder
-				if (Mathf.Approximately(holder.tank.Remaining,0f)) {
-					continue;
-				} else if (holder.tank.Remaining < gas.Total) { //it has some space left in it
-					float ratio = holder.tank.Remaining/gas.Total;
-					holder.tank.atmosphere.Mass += gas*ratio;
-					gas -= gas*ratio;
-				} else {
-					holder.tank.atmosphere.Mass += gas;
-					return new Gases();
-				}
-			}
-		}
-		
-		return gas;
+	void Start() {
+		door.DoorOpening += SetOpen;
+		door.DoorClosing += SetClosed;
+		transform.position = door.transform.position + Vector3.up*3f;
+	}
+
+	void OnMouseDown() {
+		door.Toggle();
 	}
 	
-	public Gases Pull(float amount) {
-		return new Gases();
+	void SetOpen(Door d) {
+		renderer.material.color = Color.green;
+	}
+	
+	void SetClosed(Door d) {
+		renderer.material.color = Color.red;
 	}
 }
 

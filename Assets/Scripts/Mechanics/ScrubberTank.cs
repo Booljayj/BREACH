@@ -5,7 +5,7 @@ public class ScrubberTank : MonoBehaviour {
 	public float curCapacity;
 	public float maxCapacity;
 	
-	public Gases ScrubGas(Gases gas) {
+	public gases ScrubGas(gases gas) {
 		float massCarbon = gas.CO2*.273f;
 		float massTrapped;
 		

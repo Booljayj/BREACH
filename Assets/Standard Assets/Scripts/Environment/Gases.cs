@@ -14,7 +14,7 @@ public enum GasType {
 }
 
 [System.SerializableAttribute]
-public class Gases {
+public class gases {
 	public float N2;
 	public float O2;
 	public float CO2;
@@ -31,8 +31,8 @@ public class Gases {
 		get {return Mathf.Abs(N2)+Mathf.Abs(O2)+Mathf.Abs(CO2)+Mathf.Abs(CO)+Mathf.Abs(CH4)+Mathf.Abs(NOX);}
 	}
 	
-	public Gases Positives {
-		get {return new Gases(
+	public gases Positives {
+		get {return new gases(
 				N2 > 0 ? N2 : 0,
 				O2 > 0 ? O2 : 0,
 				CO2 > 0 ? CO2 : 0,
@@ -42,8 +42,8 @@ public class Gases {
 		}
 	}
 	
-	public Gases () {}
-	public Gases (float N2, float O2, float CO2, float CO, float CH4, float NOX) {
+	public gases () {}
+	public gases (float N2, float O2, float CO2, float CO, float CH4, float NOX) {
 		this.N2 = N2;
 		this.O2 = O2;
 		this.CO2 = CO2;
@@ -51,7 +51,7 @@ public class Gases {
 		this.CH4 = CH4;
 		this.NOX = NOX;
 	}
-	public Gases (Gases i) {
+	public gases (gases i) {
 		this.N2 = i.N2;
 		this.O2 = i.O2;
 		this.CO2 = i.CO2;
@@ -100,30 +100,30 @@ public class Gases {
 		}
 	}
 	
-	public static Gases operator + (Gases A, Gases B) {
-		return new Gases(A.N2+B.N2,
+	public static gases operator + (gases A, gases B) {
+		return new gases(A.N2+B.N2,
 			A.O2+B.O2,
 			A.CO2+B.CO2,
 			A.CO+B.CO,
 			A.CH4+B.CH4,
 			A.NOX+B.NOX);
 	}
-	public static Gases operator - (Gases A, Gases B) {
+	public static gases operator - (gases A, gases B) {
 		return A+(B*-1f);
 	}
-	public static Gases operator * (Gases g, float s) {
-		return new Gases(g.N2*s,
+	public static gases operator * (gases g, float s) {
+		return new gases(g.N2*s,
 			g.O2*s,
 			g.CO2*s,
 			g.CO*s,
 			g.CH4*s,
 			g.NOX*s);
 	}
-	public static Gases operator * (float s, Gases g) {
+	public static gases operator * (float s, gases g) {
 		return g*s;
 	}
-	public static Gases operator / (Gases g, float s) {
-		return new Gases(g.N2/s,
+	public static gases operator / (gases g, float s) {
+		return new gases(g.N2/s,
 			g.O2/s,
 			g.CO2/s,
 			g.CO/s,
@@ -140,7 +140,7 @@ public class Gases {
 		NOX = 0;
 	}
 	
-	public static bool Approximately (Gases g1, Gases g2) {
+	public static bool Approximately (gases g1, gases g2) {
 		if (Mathf.Approximately(g1.N2, g2.N2) &&
 			Mathf.Approximately(g1.O2, g2.O2) &&
 			Mathf.Approximately(g1.CO2, g2.CO2) &&

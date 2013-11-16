@@ -1,118 +1,168 @@
 using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 
-/* Atmosphere defines the contents of the volume of a room.
- * Three primary properties are stored. Everything else is derived using the ideal gas law. They are:
- * 	*Boundaries
- * 		*Volume: length*width*height
- * 	*Heat
- * 		*Temperature: Heat/C_p
- * 	*Mass
- * 		*Percent: Mass/MassTotal
- * 		*R: mass-modified ideal gas constant, 
- * 		*C_p: mass-modified specific heat at constant pressure
- * 
- * Some other properties that are necessary for calculations are:
- * 	*Density: MassTotal/Volume
- * 	*Pressure: R*Temperature/Volume
- */
- 
-[ExecuteInEditMode()]
+[ExecuteInEditMode]
 public class Atmosphere : MonoBehaviour {
-	//this really only exists so I can draw pretty boxes around the atmospheres... not that important right now.
-	//public Bounds boundaries; //the boundaries of this atmosphere. Used in the initial volume calculation.
-	
-	#region Primary Properties
-	[UnityEngine.SerializeField]
-	private float _volume; //m^3
-	public float Volume {
-		get {return _volume;}
-		set {_volume = value;}
+	void Awake() {
+		Debug.Log("Atmosphere Enabled");
+		
+		if (gases == null) gases = ScriptableObject.CreateInstance<GasDictionary>();
+		if (percent == null) percent = ScriptableObject.CreateInstance<GasDictionary>();
 	}
 	
-	[UnityEngine.SerializeField]
-	private float _heat;
-	public float Heat { //MJ
-		get {return _heat;}
-		set {_heat = value;}
+	void OnEnable() {
+		Recalculate();
 	}
 	
-	[UnityEngine.SerializeField]
-	private Gases _mass;
-	public Gases Mass { //kg
-		get {return _mass;}
-		set {_mass = value; CalculateProperties();}
-	}
-	#endregion
-	
-	#region Derived Properties
-	public float R {
-		get {return (_mass.N2*296.8f + _mass.O2*259.8f + _mass.CO2*188.9f + _mass.CO*297f + _mass.CH4*518.3f);}//individual R values are all in J/kg*K
+	void Reset() {
+		volume = 1f; heat = 0f; mass = 0f;
+		gases.Clear(); percent.Clear();
+		R = 0; Cp = 0; k = 0;
 	}
 	
-	public float C_p {
-		get {return (_mass.N2*1.04f + _mass.O2*.919f + _mass.CO2*.844f + _mass.CO*1.02f + _mass.CH4*2.22f)/1000f;}//individual c_p values are all in kJ/kg*K, returns MJ/kg*K
-	}
-	
-	public float Temperature { //K
-		get {return _heat/C_p;}
-		set {_heat = value*C_p;} //this gives devs an easy way to set the temperature to a specific value, since what's actually stored is heat.
-	}
-	
-	public float Pressure { //Pa
-		get {return R*Temperature/_volume;}
-	}
-	
-	private Gases _percent = new Gases();
-	public Gases Percent { //%
-		get {return _percent;}
-	}
-	
-	public float GasDensity { //kg/m^3
-		get {return _mass.Total/_volume;}
-	}
-	
-	void Start() {
-		CalculateProperties();
-	}
-	
-	public void CalculateProperties() {		
-		//calculate percentages
-		float masstotal = _mass.Total;
-		_percent.N2 = _mass.N2/masstotal;
-		_percent.O2 = _mass.O2/masstotal;
-		_percent.CO2 = _mass.CO2/masstotal;
-		_percent.CO = _mass.CO/masstotal;
-		_percent.CH4 = _mass.CH4/masstotal;
-		_percent.NOX = _mass.NOX/masstotal;
-	}
-	
-	static public float CalculateHeatCapacity(Gases gas) {
-		return (gas.N2*1.04f + gas.O2*.919f + gas.CO2*.844f + gas.CO*1.02f + gas.CH4*2.22f)/1000f;
-	}
-	
-	static public float CalculateIdealConstant(Gases gas) {
-		return (gas.N2*296.8f + gas.O2*259.8f + gas.CO2*188.9f + gas.CO*297f + gas.CH4*518.3f);
-	}
-	#endregion
-	
-	#region Manipulators
-	public Gases GetGases (Gases gas) {
-		if (gas.N2 > _mass.N2) gas.N2 = _mass.N2;
-		if (gas.O2 > _mass.O2) gas.O2 = _mass.O2;
-		if (gas.CO2 > _mass.CO2) gas.CO2 = _mass.CO2;
-		if (gas.CO > _mass.CO) gas.CO = _mass.CO;
-		if (gas.CH4 > _mass.CH4) gas.CH4 = _mass.CH4;
-		if (gas.NOX > _mass.NOX) gas.NOX = _mass.NOX;
-		return gas;
-	}
-	
-	public float GetHeat (float amount) {
-		if (amount >= _heat) {
-			return _heat;
-		} else {
-			return amount;
+	public float this[string type] {
+		get {return gases[type];}
+		set {
+			mass -= gases[type];
+			gases[type] = value;
+			mass += value;
+			Recalculate();
 		}
+	}
+	
+	public void Remove(string type) {
+		mass -= gases[type];
+		gases.Remove(type);
+		Recalculate();
+	}
+	
+	private void Recalculate() {
+		R = 0; Cp = 0; k = 0; percent.Clear();
+
+		foreach (string type in gases.Keys) {
+			Property gas = Properties.Get(type);
+			float gmass = this[type];
+
+			R += gmass*gas.R; //individual R values are all in J/kg*K
+			Cp += gmass*gas.Cp; //individual Cp values are all in kJ/kg*K
+			k += gmass*gas.k;
+			percent[type] = gmass/mass;
+		}
+		k /= mass;
+	}
+	
+	#region Primary Fields //=================================================================
+	public float volume = 1f; // m^3
+	public float heat; // kJ
+	public float mass; // kg
+	
+	//storage for the gas dictionary
+	public GasDictionary gases;// = ScriptableObject.CreateInstance<GasDictionary>();
+	public GasDictionary percent;// = ScriptableObject.CreateInstance<GasDictionary>();
+	//[SerializeField] public GasDictionary gases = new GasDictionary(); // kg
+	//[SerializeField] public GasDictionary percent = new GasDictionary(); // %
+	//[SerializeField] public List<GasPair> gaslist = new List<GasPair>();
+	#endregion
+
+	#region Mass Properties //=============================================================
+	public float R {get; private set;} // J/K
+	public float Cp {get; private set;} // kJ/K
+	public float k {get; private set;} // %
+	#endregion
+
+	#region Derived Properties //=================================================================
+	public float Temperature { // K
+		get {return heat/Cp;}
+		set {heat = value*Cp;} //for convenience
+	}
+
+	public float Pressure { // Pa
+		get {return R*Temperature/volume;}
+	}
+
+	public float Density { // kg/m^3
+		get {return mass/volume;}
+	}
+	#endregion
+	
+	#region Dictionary Accessors //===============================================================
+	public int Count {
+		get {return gases.Count;}
+	}
+	
+	public System.Collections.Generic.Dictionary<string, float>.KeyCollection Keys {
+		get {return gases.Keys;}
+	}
+	
+	public System.Collections.Generic.Dictionary<string, float>.ValueCollection Values {
+		get {return gases.Values;}
+	}
+	
+	public IEnumerator GetEnumerator() {
+		return gases.GetEnumerator();
+	}
+	#endregion
+	
+	#region Get Methods //========================================================================
+	//get a specific volume
+	public AtmospherePacket GetVolume(float vol = -1f) {
+		AtmospherePacket Ap = new AtmospherePacket();
+		float ratio;
+		
+		if (vol >= volume || vol == -1f)
+			ratio = 1f;
+		else
+			ratio = vol/volume;
+		
+		foreach (KeyValuePair<string, float> pair in gases)
+			Ap[pair.Key] = pair.Value*ratio;
+		Ap.heat = heat*ratio;
+		Ap.volume = volume;
+		
+		return Ap;
+	}
+	
+	//get a specific mass
+	public AtmospherePacket GetMass(float ma = -1f) {
+		AtmospherePacket Ap = new AtmospherePacket();
+		float ratio;
+		
+		if (ma >= mass || ma == -1f)
+			ratio = 1f;
+		else
+			ratio = ma/mass;
+		
+		foreach (KeyValuePair<string, float> pair in gases)
+			Ap[pair.Key] = pair.Value*ratio;
+		Ap.heat = heat*ratio;
+		Ap.volume = volume*ratio;
+		
+		return Ap;
+	}
+	#endregion
+
+	#region Transport Methods //==================================================================
+	//pull a specified atmosphere from this one
+	public void Pull(AtmospherePacket atmos) {
+		foreach (string type in atmos.Keys) {
+			gases[type] -= atmos[type];
+		}
+		mass -= atmos.mass;
+		heat -= atmos.heat;
+		
+		Recalculate();
+	}
+	
+	//push a specified atmosphere into this one
+	public void Push(AtmospherePacket atmos) {
+		foreach (string type in atmos.Keys) {
+			gases[type] += atmos[type];
+		}
+		mass += atmos.mass;
+		heat += atmos.heat;
+		
+		Recalculate();
 	}
 	#endregion
 }

@@ -21,6 +21,7 @@
 using UnityEngine;
 using System.Collections;
 
+//TODO Valve should be instead a class that updates an airlock with a new location and opens/closes it
 public class Valve : MonoBehaviour {
 	public Vector3 Location; //the valve's location relative to this gameobject.
 	public float Area; //the valve's area
@@ -31,53 +32,14 @@ public class Valve : MonoBehaviour {
 	private float T; //difference factor
 	private float mdot;
 	
-	private Gases dm;
+	private gases dm;
 	private float dQ;
 	
 	public bool open;
 	public bool debug = false;
 	
 	void Update() {
-		if (open) {
-			//find where Outside is using the Valve location. If none is found, we are venting to space.
-			Outside = GameObject.FindWithTag("Space").GetComponent<Atmosphere>();
-			
-			if (Inside.Pressure > Outside.Pressure) {
-			//if (Mathf.RoundToInt(RoomA.Pressure) != Mathf.RoundToInt(RoomB.Pressure)) {
-				//calculate the expansion factor Y = 1-(1-r)*(.41+.35 b^4)/k
-				Y = 1f - (1f-Outside.Pressure/Inside.Pressure)*(.2938f);
-			
-				//calculate the difference scale factor T = sqrt(1-p2/p1);
-				T = Mathf.Sqrt(1-Mathf.Pow(Outside.Pressure/Inside.Pressure, 4));
-				
-				//calculate the mass flow rate m = TCYA*sqrt(2*rho*(P1-P2)).
-				mdot = T*.6f*Y*Area*Mathf.Sqrt(2f*Inside.GasDensity*(Inside.Pressure-Outside.Pressure));
-				
-				//calculate the dm from pressure differences
-				dm = Inside.Percent*mdot*Time.deltaTime;
-			} else {
-				dm = new Gases();
-			}
-			
-			//Mass-driven heat transfer
-			if (!Mathf.Approximately(dm.AbsTotal, 0)) {
-				//get available mass from inside atmosphere
-				dm = Inside.GetGases(dm);
-				
-				//calculate the mass-driven heat transfer
-				dQ = dm.Total*Inside.Heat/Inside.Mass.Total;
-			} else {
-				dQ = 0;
-			}
-			
-			Inside.Mass -= dm;
-			Outside.Mass += dm;
-			
-			Inside.Heat -= dQ;
-			Outside.Heat += dQ;
-			
-			if (debug) Debug.Log("Transfering "+dm.Total.ToString()+"kg and "+dQ.ToString()+"MJ from tank "+name);
-		}
+		
 	}
 }
 

@@ -22,12 +22,12 @@ using UnityEngine;
 using System.Collections;
 
 public class GasMatrix {	
-	public Gases N {get; set;}
-	public Gases O {get; set;}
-	public Gases C {get; set;}
-	public Gases T {get; set;}
+	public gases N {get; set;}
+	public gases O {get; set;}
+	public gases C {get; set;}
+	public gases T {get; set;}
 	
-	public GasMatrix(Gases n, Gases o, Gases c, Gases t) {
+	public GasMatrix(gases n, gases o, gases c, gases t) {
 		N = n; O = o; C = c; T = t;
 	}
 	public GasMatrix() {}
@@ -72,7 +72,7 @@ public class MassCyclometer : MonoBehaviour {
 		return x;
 	}
 	
-	public void SubProcess(GasType type, Gases input, GasMatrix M) {
+	public void SubProcess(GasType type, gases input, GasMatrix M) {
 		float[] x = RandomArray((int)type, error, tolerance);
 		
 		M.N[type] += x[0]*input[type];
@@ -81,7 +81,7 @@ public class MassCyclometer : MonoBehaviour {
 		M.T[type] += x[3]*input[type];
 	}
 	
-	public void Process(Gases input, Gases N, Gases O, Gases C, Gases T) {
+	public void Process(gases input, gases N, gases O, gases C, gases T) {
 		GasMatrix M = new GasMatrix(N,O,C,T);
 		
 		//Nitrogen

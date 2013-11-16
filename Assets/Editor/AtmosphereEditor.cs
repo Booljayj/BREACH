@@ -1,61 +1,70 @@
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEditor;
 using System.Collections;
+using System.Collections.Generic;
 
 [CustomEditor(typeof(Atmosphere))]
 public class AtmosphereEditor : Editor {
+	Atmosphere a;
+	int addindex;
+	float addvalue;
+	List<string> validGases = new List<string>();
+	List<string> gases = new List<string>();
+	
+	void Awake() {
+		a = (Atmosphere)target;
+		
+		validGases.Clear();
+		foreach (string key in Properties.properties.Keys)
+			validGases.Add(key);
+	}
+	
 	public override void OnInspectorGUI() {
-		Atmosphere t = (Atmosphere)target;
+		EditorGUILayout.LabelField("Custom Atmosphere Inspector");
 		
 		EditorGUILayout.BeginHorizontal();
-			EditorGUILayout.LabelField("Volume", GUILayout.Width(100f));
-			t.Volume = EditorGUILayout.FloatField(t.Volume, GUILayout.Width(100f));
-			EditorGUILayout.LabelField("m^3");
-		EditorGUILayout.EndHorizontal();
-		EditorGUILayout.BeginHorizontal();
-			EditorGUILayout.LabelField("Heat", GUILayout.Width(100f));
-			t.Heat = EditorGUILayout.FloatField(t.Heat, GUILayout.Width(100f));
-			EditorGUILayout.LabelField("MJ Temp: "+t.Temperature.ToString("N1"));
-		EditorGUILayout.EndHorizontal();
-		EditorGUILayout.BeginHorizontal();
-			EditorGUILayout.LabelField("Pressure", GUILayout.Width(100f));
-			EditorGUILayout.LabelField(t.Pressure.ToString("N1"), GUILayout.Width(100f));
-			EditorGUILayout.LabelField("Pa");
+			EditorGUILayout.LabelField("Volume:", GUILayout.Width(50f));
+			a.volume = EditorGUILayout.FloatField(a.volume);
+			EditorGUILayout.LabelField("m^3", GUILayout.Width(30f));
 		EditorGUILayout.EndHorizontal();
 		
-		EditorGUILayout.LabelField("Gas Content");
 		EditorGUILayout.BeginHorizontal();
-			EditorGUILayout.LabelField("N2", GUILayout.Width(30f));
-			t.Mass.N2 = EditorGUILayout.FloatField(t.Mass.N2);
-			EditorGUILayout.LabelField("kg    "+(t.Percent.N2).ToString("P1"));
-		EditorGUILayout.EndHorizontal();
-		EditorGUILayout.BeginHorizontal();
-			EditorGUILayout.LabelField("O2", GUILayout.Width(30f));
-			t.Mass.O2 = EditorGUILayout.FloatField(t.Mass.O2);
-			EditorGUILayout.LabelField("kg    "+(t.Percent.O2).ToString("P1"));
-		EditorGUILayout.EndHorizontal();
-		EditorGUILayout.BeginHorizontal();
-			EditorGUILayout.LabelField("CO2", GUILayout.Width(30f));
-			t.Mass.CO2 = EditorGUILayout.FloatField(t.Mass.CO2);
-			EditorGUILayout.LabelField("kg    "+(t.Percent.CO2).ToString("P1"));
-		EditorGUILayout.EndHorizontal();
-		EditorGUILayout.BeginHorizontal();
-			EditorGUILayout.LabelField("CO", GUILayout.Width(30f));
-			t.Mass.CO = EditorGUILayout.FloatField(t.Mass.CO);
-			EditorGUILayout.LabelField("kg    "+(t.Percent.CO).ToString("P1"));
-		EditorGUILayout.EndHorizontal();
-		EditorGUILayout.BeginHorizontal();
-			EditorGUILayout.LabelField("CH4", GUILayout.Width(30f));
-			t.Mass.CH4 = EditorGUILayout.FloatField(t.Mass.CH4);
-			EditorGUILayout.LabelField("kg    "+(t.Percent.CH4).ToString("P1"));
-		EditorGUILayout.EndHorizontal();
-		EditorGUILayout.BeginHorizontal();
-			EditorGUILayout.LabelField("NOX", GUILayout.Width(30f));
-			t.Mass.NOX = EditorGUILayout.FloatField(t.Mass.NOX);
-			EditorGUILayout.LabelField("kg    "+(t.Percent.NOX).ToString("P1"));
+			EditorGUILayout.LabelField("Heat:", GUILayout.Width(50f));
+			a.heat = EditorGUILayout.FloatField(a.heat);
+			EditorGUILayout.LabelField("kJ", GUILayout.Width(30f));
 		EditorGUILayout.EndHorizontal();
 		
-		EditorGUILayout.LabelField("Gas Density: "+t.GasDensity.ToString("N1")+" kg/m^3");
+		EditorGUILayout.Separator();
+		gases.Clear();
+		foreach (string k in a.Keys)
+			gases.Add(k);
+		foreach (string gas in gases) {
+			EditorGUILayout.BeginHorizontal();
+				EditorGUILayout.Space();
+				EditorGUILayout.LabelField(gas+":", GUILayout.Width(100f));
+				a[gas] = EditorGUILayout.FloatField(a[gas]);
+				EditorGUILayout.LabelField(string.Format("{0}%", a.percent[gas]));
+				if (GUILayout.Button("X", GUILayout.Width(20f))) {
+					a.Remove(gas);
+				}
+			EditorGUILayout.EndHorizontal();
+		}
+		
+		EditorGUILayout.BeginHorizontal();
+			EditorGUILayout.Space();
+			addindex = EditorGUILayout.Popup(addindex, validGases.ToArray());
+			addvalue = EditorGUILayout.FloatField(addvalue);
+			if (GUILayout.Button("Add", GUILayout.Width(50f))) {
+				a[validGases[addindex]] = addvalue;
+			}
+		EditorGUILayout.EndHorizontal();
+		
+		EditorGUILayout.Separator();
+		EditorGUILayout.LabelField(string.Format("Mass: {0} kg", a.mass.ToString()));
+		EditorGUILayout.LabelField(string.Format("Pressure: {0} Pa", a.Pressure.ToString()));
+		EditorGUILayout.LabelField(string.Format("Temperature: {0} K", a.Temperature.ToString()));
+		EditorGUILayout.LabelField(string.Format("R: {0} K", a.R.ToString()));
+		EditorGUILayout.LabelField(string.Format("Cp: {0} K", a.Cp.ToString()));
+		EditorGUILayout.LabelField(string.Format("k: {0} K", a.k.ToString()));
 	}
 }
-

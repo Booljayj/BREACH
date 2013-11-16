@@ -17,9 +17,10 @@ public class Property {
 	public float k {get; private set;}
 }
 
-public class PropertyGroup {
-	Dictionary<string, Property> _properties = new Dictionary<string, Property>(){
+public static class Properties {
+	static public Dictionary<string, Property> properties = new Dictionary<string, Property>(){
 		//These are taken at 300K, from the McGraw-Hill Gas Property Tables
+		{"Null", new Property()},
 		{"Argon", new Property(39.948f, 0.5203f)},
 		{"CarbonDioxide", new Property(44.01f, 0.846f)},
 		{"CarbonMonoxide", new Property(28.011f, 1.040f)},
@@ -29,13 +30,10 @@ public class PropertyGroup {
 		{"Water", new Property(18.015f, 1.8723f)},
 	};
 
-	public Property this[string index] {
-		get {
-			if (!_properties.ContainsKey(index))
-				return new Property();
-			else
-				return _properties[index];
-		}
+	static public Property Get(string type) {
+		if (properties.ContainsKey(type))
+			return properties[type];
+		else
+			return properties["Null"];
 	}
-
 }

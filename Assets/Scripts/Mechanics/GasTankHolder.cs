@@ -5,7 +5,7 @@ public class GasTankHolder : MonoBehaviour, PlugHandler {
 	public GasInterchange interchange;
 	
 	public GasTank tank;
-	public GasTankType type;
+	public string type;
 	
 	bool locked = false;
 	

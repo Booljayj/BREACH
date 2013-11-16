@@ -1,5 +1,6 @@
 using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 
 public enum GasTankState {
 	Empty,
@@ -7,99 +8,30 @@ public enum GasTankState {
 	Full,
 }
 
-public enum GasTankType {
-	Null = 0,
-	Nitrogen,
-	Oxygen,
-	Carbon,
-	Toxin,
-}
-
 public class GasTank : MonoBehaviour {
-	public Atmosphere atmosphere;
+	public Atmosphere atmosphere;	
 	public Valve valve;
-	public GasType gastype;
+	public string GasType;
 	
-	public float maxPressure = 2000f;
-	
-	public float Capacity {
-		get {return atmosphere.Mass.Total;}
-	}
-	public float MaxCapacity {
-		get {return 0;}
-	}
+	public float Capacity = 100000f; // Pa
 	
 	public float Remaining {
-		get {return Capacity - atmosphere.Mass.Total;}
+		get {return Capacity - atmosphere.Pressure;}
 	}
 	
 	void Start () {
-		atmosphere = GetComponent<Atmosphere>();
-	}
-	
-	void Update () {		
-		if (atmosphere.Pressure > maxPressure) {
-			valve.open = true;
-		} else {
-			valve.open = false;
-		}
+		valve = GetComponent<Valve>();
 	}
 	
 	//pull some gas from the tank.
-	public Gases Pull (float amount) {
-		Gases outMass;
-		if (atmosphere.Mass.Total > amount) {
-			outMass = atmosphere.Percent*amount;
-			atmosphere.Mass -= outMass;
-		} else {
-			outMass = atmosphere.Mass;
-			atmosphere.Mass = new Gases();
-		}
-		
-		return outMass;
+	public AtmospherePacket Pull (float mass) {
+		//TODO Add Function
+		return new AtmospherePacket();
 	}
 	
-	//push some gas into the tank. Return what doesn't fit
-	public Gases Push (Gases gas) {
-		Gases outMass;
-		if (Remaining < gas.Total) { //we don't have enough space for all the gas
-			float percent = Remaining/gas.Total; //find what percentage of the input we can accept
-			atmosphere.Mass += (gas*percent); //add that percentage to the atmosphere.
-			outMass = (gas*(1f-percent)); //the remainder is output
-		} else {
-			atmosphere.Mass += gas;
-			outMass = new Gases();
-		}
-		
-		return outMass;
-	}
-	
-	//request to push mass into tank. Return amount that does not fit.
-	public float PushGas(float amount, GasType type) {
-		if (atmosphere.Mass.Total + amount > MaxCapacity) {
-			float topoff = MaxCapacity - atmosphere.Mass.Total;
-			atmosphere.Mass[type] += topoff;
-			//tankState = GasTankState.Full;
-			return amount - topoff;
-		} else {
-			atmosphere.Mass[type] += amount;
-			//tankState = GasTankState.Normal;
-			return 0;
-		}
-	}
-	
-	//request to pull mass from tank. Return amount available.
-	public float PullGas(float amount, GasType type) {
-		if (atmosphere.Mass[type] < amount) {
-			float ret = atmosphere.Mass[type];
-			atmosphere.Mass[type] = 0;
-			//tankState = GasTankState.Empty;
-			return ret;
-		} else {
-			atmosphere.Mass[type] -= amount;
-			//tankState = GasTankState.Normal;
-			return amount;
-		}
+	//push some gas into the tank.
+	public void Push (AtmospherePacket atmos) {
+		//TODO Add Function
 	}
 }
 

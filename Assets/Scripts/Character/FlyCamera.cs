@@ -15,7 +15,7 @@ public class FlyCamera : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
-		cam = transform.FindChild("Main Camera").transform;
+		cam = Camera.main.transform;
 	}
 	
 	// Update is called once per frame
@@ -26,6 +26,7 @@ public class FlyCamera : MonoBehaviour {
 			movement = new Vector3(Input.GetAxis("Horizontal")*speedX, 0, Input.GetAxis("Vertical")*speedZ);
 		}
 		transform.position += (transform.rotation*movement)*Time.deltaTime;
+		cam.position = transform.position;
 		
 		transform.Rotate(Vector3.up, Input.GetAxis("Mouse X")*sensitivityYaw);
 		if (Input.GetMouseButton(1)) {
