@@ -59,8 +59,8 @@ public class AtmospherePacket {
 	public float heat; // kJ
 	public float mass; // kg
 	
-	public GasDictionary gases = ScriptableObject.CreateInstance<GasDictionary>();
-	public GasDictionary percent = ScriptableObject.CreateInstance<GasDictionary>();
+	public GasDictionary gases;
+	public GasDictionary percent;
 	//private GasDictionary _gases = new GasDictionary(); // kg
 	
 	#endregion
@@ -87,15 +87,11 @@ public class AtmospherePacket {
 	#endregion
 	
 	#region Dictionary Accessors //===============================================================
-	public int Count {
-		get {return gases.Count;}
-	}
-	
-	public System.Collections.Generic.Dictionary<string, float>.KeyCollection Keys {
+	public List<string> Keys {
 		get {return gases.Keys;}
 	}
 	
-	public System.Collections.Generic.Dictionary<string, float>.ValueCollection Values {
+	public List<float> Values {
 		get {return gases.Values;}
 	}
 	

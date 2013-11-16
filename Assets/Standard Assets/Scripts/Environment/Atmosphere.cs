@@ -5,10 +5,8 @@ using System.Collections.Generic;
 [ExecuteInEditMode]
 public class Atmosphere : MonoBehaviour {
 	void Awake() {
-		Debug.Log("Atmosphere Enabled");
-		
-		if (gases == null) gases = ScriptableObject.CreateInstance<GasDictionary>();
-		if (percent == null) percent = ScriptableObject.CreateInstance<GasDictionary>();
+		if (gases == null) gases = new GasDictionary();
+		if (percent == null) percent = new GasDictionary();
 	}
 	
 	void OnEnable() {
@@ -57,12 +55,8 @@ public class Atmosphere : MonoBehaviour {
 	public float heat; // kJ
 	public float mass; // kg
 	
-	//storage for the gas dictionary
-	public GasDictionary gases;// = ScriptableObject.CreateInstance<GasDictionary>();
-	public GasDictionary percent;// = ScriptableObject.CreateInstance<GasDictionary>();
-	//[SerializeField] public GasDictionary gases = new GasDictionary(); // kg
-	//[SerializeField] public GasDictionary percent = new GasDictionary(); // %
-	//[SerializeField] public List<GasPair> gaslist = new List<GasPair>();
+	public GasDictionary gases; // kg
+	public GasDictionary percent; // %
 	#endregion
 
 	#region Mass Properties //=============================================================
@@ -87,20 +81,12 @@ public class Atmosphere : MonoBehaviour {
 	#endregion
 	
 	#region Dictionary Accessors //===============================================================
-	public int Count {
-		get {return gases.Count;}
-	}
-	
-	public System.Collections.Generic.Dictionary<string, float>.KeyCollection Keys {
+	public List<string> Keys {
 		get {return gases.Keys;}
 	}
 	
-	public System.Collections.Generic.Dictionary<string, float>.ValueCollection Values {
+	public List<float> Values {
 		get {return gases.Values;}
-	}
-	
-	public IEnumerator GetEnumerator() {
-		return gases.GetEnumerator();
 	}
 	#endregion
 	

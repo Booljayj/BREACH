@@ -20,99 +20,96 @@
 //  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 using UnityEngine;
+using System.Collections;
 using System.Collections.Generic;
+using System;
 
-[System.Serializable]
-public class GasDictionary : ScriptableObject {
-	[SerializeField] public List<GasPair> list;
-	public Dictionary<string,float> dictionary;
-	
-	public GasDictionary() {
-		dictionary = new Dictionary<string, float>();
-		if (list == null) {
-			Debug.Log("List was recreated");
-			list = new List<GasPair>();
-		}
-	}
+[Serializable]
+public class GasDictionary : IEnumerable {
+	[SerializeField] private List<int> indexes = new List<int>();
+	[SerializeField] private List<string> keys = new List<string>();
+	[SerializeField] private List<float> values = new List<float>();
 	
 	public float this[string k] {
 		get {
-			if (dictionary.ContainsKey(k)) return dictionary[k];
-			else return 0f;
+			int index = indexes.IndexOf(k.GetHashCode());
+			if (index == -1)
+				return 0;
+			else
+				return values[index];
 		}
 		set {
-			if (dictionary.ContainsKey(k))
-				dictionary[k] = value;
-			else
-				dictionary.Add(k, value);
+			int index = indexes.IndexOf(k.GetHashCode());
+			if (index == -1) {
+				indexes.Add(k.GetHashCode());
+				keys.Add(k);
+				values.Add(value);
+			} else {
+				values[index] = value;
+			}
 		}
 	}
 	
-	#region Serialization
-	void OnEnable() {
-		Debug.Log("Dictionary Enabled");
-		dictionary.Clear();
-		foreach (GasPair pair in list) {
-			dictionary.Add(pair.type, pair.val);
-		}
-	}
+	public List<string> Keys {get{return keys;}}
+	public List<float> Values {get{return values;}}
 	
-	void OnDisable() {
-		Debug.Log("Dictionary Disabled");
-		list.Clear();
-		foreach (KeyValuePair<string,float> pair in dictionary) {
-			list.Add(new GasPair(pair.Key, pair.Value));
-		}
-	}
-	#endregion
 	
-	#region Dictionary Access
+	
 	public void Clear() {
-		dictionary.Clear();
+		indexes.Clear(); keys.Clear(); values.Clear();
 	}
 	
 	public void Add(string k, float v) {
-		dictionary.Add(k,v);
+		indexes.Add(k.GetHashCode()); keys.Add(k); values.Add(v);
 	}
 	
 	public void Remove(string k) {
-		dictionary.Remove(k);
+		int index = indexes.IndexOf(k.GetHashCode());
+		indexes.RemoveAt(index);
+		keys.RemoveAt(index);
+		values.RemoveAt(index);
 	}
 	
-	public Dictionary<string,float>.Enumerator GetEnumerator() {
-		return dictionary.GetEnumerator();
+	public IEnumerator GetEnumerator() {
+		return new GasDictionaryIterator(keys, values);
 	}
-	
-	public Dictionary<string,float>.KeyCollection Keys {
-		get {return dictionary.Keys;}
-	}
-	
-	public Dictionary<string,float>.ValueCollection Values {
-		get {return dictionary.Values;}
-	}
-	
-	public int Count {
-		get {return dictionary.Count;}
-	}
-	#endregion
 }
 
-[System.Serializable]
+public class GasDictionaryIterator : IEnumerator {
+	int index = -1;
+	
+	List<string> keys;
+	List<float> values;
+	
+	public GasDictionaryIterator(List<string> keylist, List<float> valuelist) {
+		keys = keylist;
+		values = valuelist;
+	}
+	
+	public bool MoveNext() {
+		index++;
+		return (index < keys.Count);
+	}
+	
+	public void Reset() {
+		index = -1;
+	}
+	
+	object IEnumerator.Current {
+		get {return Current;}
+	}
+	
+	GasPair Current {
+		get {return new GasPair(keys[index], values[index]);}
+	}
+}
+
 public class GasPair {
-	public string type;
-	public float val;
+	public string Key {get; private set;}
+	public float Value {get; private set;}
 	
-	public GasPair(string type, float val) {
-		this.type = type;
-		this.val = val;
-	}
-	
-	public override bool Equals(object obj) {
-		GasPair P = obj as GasPair;
-		if (P == null || P.type != type) return false;
-		else return true;
-	}
-	public override int GetHashCode() {
-		return type.GetHashCode();
+	public GasPair(string key, float val) {
+		Key = key;
+		Value = val;
 	}
 }
