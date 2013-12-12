@@ -4,7 +4,6 @@ using System.Collections;
 public class Door : MonoBehaviour {
 	public enum DoorState {Closed, Opening, Open, Closing};
 
-	public delegate void EventHandler();
 	public event EventHandler DoorOpened;
 	public event EventHandler DoorOpening;
 	public event EventHandler DoorClosed;
@@ -35,8 +34,11 @@ public class Door : MonoBehaviour {
 	private Airlock airlock;
 
 	void Start() {
-		DoorOpening += airlock.Open;
-		DoorClosed	+= airlock.Close;
+		airlock = GetComponent<Airlock>();
+		if (airlock != null) {
+			DoorOpening += airlock.Open;
+			DoorClosed	+= airlock.Close;
+		}
 	}
 
 	#region Activation
