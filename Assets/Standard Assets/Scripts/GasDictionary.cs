@@ -30,6 +30,9 @@ public class GasDictionary : IEnumerable {
 	[SerializeField] private List<string> keys = new List<string>();
 	[SerializeField] private List<float> values = new List<float>();
 	
+	public List<string> Keys {get{return keys;}}
+	public List<float> Values {get{return values;}}
+	
 	public float this[string k] {
 		get {
 			int index = indexes.IndexOf(k.GetHashCode());
@@ -50,11 +53,6 @@ public class GasDictionary : IEnumerable {
 		}
 	}
 	
-	public List<string> Keys {get{return keys;}}
-	public List<float> Values {get{return values;}}
-	
-	
-	
 	public void Clear() {
 		indexes.Clear(); keys.Clear(); values.Clear();
 	}
@@ -65,9 +63,17 @@ public class GasDictionary : IEnumerable {
 	
 	public void Remove(string k) {
 		int index = indexes.IndexOf(k.GetHashCode());
-		indexes.RemoveAt(index);
-		keys.RemoveAt(index);
-		values.RemoveAt(index);
+		if (index < -1) {
+			indexes.RemoveAt(index);
+			keys.RemoveAt(index);
+			values.RemoveAt(index);
+		} else {
+			Debug.LogWarning("Attempted to remove a nonexistent gas");
+		}
+	}
+
+	public int IndexOf(string k) {
+		return indexes.IndexOf(k.GetHashCode());
 	}
 	
 	public IEnumerator GetEnumerator() {

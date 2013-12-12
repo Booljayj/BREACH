@@ -22,27 +22,33 @@ using UnityEngine;
 using System.Collections;
 
 public class Pointer : MonoBehaviour {
+	public float range = 2.0f;
+	public Transform head;
+	
 	Ray ray;
 	RaycastHit hit;
 	
-	Transform head;
 	Activator activator = null;
 	bool activating = false;
+	public DelayedActivate delayed;
+	public Transform stored;
 	
 	void Start() {
-		head = transform.FindChild("Head");
+		if (head == null) head = transform.FindChild("Head");
 	}
 	
 	void Update () {
 		if (!activating) {
 			//we're not currently using an activator, so actively search for a new one and listen to start activating.
 			ray = new Ray(head.position, head.forward);
-			if (Physics.Raycast(ray, out hit, 2.0f)) {
-				activator = hit.transform.GetComponent<Activator>();
+			if (Physics.Raycast(ray, out hit, range)) {
+				activator = (Activator)hit.transform.GetComponent(typeof(Activator));
 				
 				if (activator != null && Input.GetMouseButtonDown(1)) {
-					activating = true;
-					activator.Activate(gameObject);
+					activating = activator.Activate(gameObject, this); //started a new activator
+				} else if (delayed != null && Input.GetMouseButtonDown(1)) {
+					activating = delayed(gameObject, this); //we have a delayed action, so do it now
+					delayed = null; //reset the delayed action
 				}
 			}
 		} else if (!activator.ActiveUpdate(gameObject)) {
@@ -52,4 +58,3 @@ public class Pointer : MonoBehaviour {
 		}
 	}
 }
-
