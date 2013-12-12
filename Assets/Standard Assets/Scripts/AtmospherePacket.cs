@@ -66,8 +66,8 @@ public class AtmospherePacket {
 	public float heat; // kJ
 	public float mass; // kg
 	
-	public GasDictionary gases = new GasDictionary(); // kg
-	public GasDictionary percent = new GasDictionary(); // %
+	public Dictionary<string, float> gases = new Dictionary<string, float>(); // kg
+	public Dictionary<string, float> percent = new Dictionary<string, float>(); // %
 	#endregion
 
 	#region Ideal Gas Properties //=============================================================
@@ -93,11 +93,11 @@ public class AtmospherePacket {
 	#endregion
 	
 	#region Dictionary Accessors //===============================================================
-	public List<string> Keys {
+	public Dictionary<string, float>.KeyCollection Keys {
 		get {return gases.Keys;}
 	}
 	
-	public List<float> Values {
+	public Dictionary<string, float>.ValueCollection Values {
 		get {return gases.Values;}
 	}
 	#endregion
@@ -112,6 +112,7 @@ public class AtmospherePacket {
 		}
 		Ar.mass = A1.mass+A2.mass;
 		Ar.heat = A1.heat+A2.heat;
+		Ar.volume = A1.volume+A2.volume;
 		Ar.Recalculate();
 		return Ar;
 	}
@@ -125,6 +126,7 @@ public class AtmospherePacket {
 		}
 		Ar.mass = A1.mass-A2.mass;
 		Ar.heat = A1.heat-A2.heat;
+		Ar.volume = A1.volume-A2.volume;
 		Ar.Recalculate();
 		return Ar;
 	}
@@ -135,6 +137,7 @@ public class AtmospherePacket {
 			Ar.gases.Add(pair.Key, pair.Value*c);
 		Ar.mass = A.mass*c;
 		Ar.heat = A.heat*c;
+		Ar.volume = A.volume*c;
 		Ar.Recalculate();
 		return Ar;
 	}
@@ -148,6 +151,7 @@ public class AtmospherePacket {
 			Ar.gases.Add(pair.Key, pair.Value/c);
 		Ar.mass = A.mass/c;
 		Ar.heat = A.heat/c;
+		Ar.volume = A.volume/c;
 		Ar.Recalculate();
 		return Ar;
 	}

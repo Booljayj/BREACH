@@ -23,13 +23,15 @@ public class Atmosphere : MonoBehaviour {
 			Recalculate();
 		}
 	}
-	
+
+	// Totally remove a gas from this atmosphere
 	public void Remove(string type) {
 		mass -= gases[type];
 		gases.Remove(type);
 		Recalculate();
 	}
-	
+
+	// Recalculate all gas properties
 	private void Recalculate() {
 		R = 0; Cp = 0; Cv = 0; k = 0; percent.Clear();
 
