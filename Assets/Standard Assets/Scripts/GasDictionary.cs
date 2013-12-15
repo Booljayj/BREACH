@@ -79,6 +79,14 @@ public class GasDictionary : IEnumerable {
 	public IEnumerator GetEnumerator() {
 		return new GasDictionaryIterator(keys, values);
 	}
+
+	public List<KeyValuePair<string, float>> ToList() {
+		List<KeyValuePair<string, float>> list = new List<KeyValuePair<string, float>>();
+		for (int i = 0; i < keys.Count; i++) {
+			list.Add(new KeyValuePair<string, float>(keys[i], values[i]));
+		}
+		return list;
+	}
 }
 
 public class GasDictionaryIterator : IEnumerator {

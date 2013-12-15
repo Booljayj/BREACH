@@ -32,17 +32,23 @@ public class AtmospherePacket {
 	public float this[string type] {
 		get {return gases[type];}
 		set {
-			mass -= gases[type];
-			gases[type] = value;
-			mass += value;
+			if (gases.ContainsKey(type)) {
+				mass += value - gases[type];
+				gases[type] = value;
+			} else {
+				mass += value;
+				gases.Add(type, value);
+			}
 			Recalculate();
 		}
 	}
 	
 	public void Remove(string type) {
-		mass -= gases[type];
-		gases.Remove(type);
-		Recalculate();
+		if (gases.ContainsKey(type)) {
+			mass -= gases[type];
+			gases.Remove(type);
+			Recalculate();
+		}
 	}
 	
 	private void Recalculate() {
