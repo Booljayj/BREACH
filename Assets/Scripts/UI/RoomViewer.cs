@@ -5,40 +5,20 @@ using System.Collections.Generic;
 public class RoomViewer : MonoBehaviour {
 	public RoomController room;
 
-	//create header, add reference here
+	public BarMeter[] channels = new BarMeter[5];
+	public GuageMeter pressure;
+	public GuageMeter temperature;
 
-	public PercentageBar[] channels = new PercentageBar[5];
-
-	//public Guage pressure;
-	//public Guage temperature;
-	UISprite pressureNeedle;
-	UILabel pressureLabel;
-	UISprite temperatureNeedle;
-	UILabel temperatureLabel;
-
-	//formatting
-	float minPressureValue = 50f; // kPa
-	float stepPressureValue = -1.8f; // deg/kPa
-
-	float minTemperatureValue = 200f; // K
-	float stepTemperatureValue = -1.8f; // deg/K
-
-	//storage
-	float channelValue;
 	List<KeyValuePair<string, float>> gases;
 	float pressureValue;
 	float temperatureValue;
 
 	void Start() {
 		//connect the Refresh method to any changed events in the room.
-
-		//control
 	}
 
 	//Using update for now, but should switch to an async Refresh method
 	void Update() {
-		//update room status here
-
 		gases = room.atmosphere.percent.ToList(); //get list of gas percentage values
 		gases.Sort((current,next)=>{return next.Value.CompareTo(current.Value);}); //sort by percentage
 		for (int i = 0; i < channels.Length; i++) {
@@ -51,12 +31,7 @@ public class RoomViewer : MonoBehaviour {
 			}
 		}
 
-//		pressureValue = room.atmosphere.Pressure;
-//		pressureNeedle.transform.rotation = Quaternion.Euler(0,0, Mathf.Clamp((pressureValue - minPressureValue)*stepPressureValue, -180, 0));
-//		pressureLabel.text = string.Format("{0:F1} kPa", pressureValue);
-//
-//		temperatureValue = room.atmosphere.Temperature;
-//		temperatureNeedle.transform.localRotation = Quaternion.Euler(0,0, Mathf.Clamp((temperatureValue - minTemperatureValue)*stepTemperatureValue, -180, 0));
-//		temperatureLabel.text = string.Format("{0:F1} K", temperatureValue);
+		pressure.Value = room.atmosphere.Pressure;
+		temperature.Value = room.atmosphere.Temperature;
 	}
 }

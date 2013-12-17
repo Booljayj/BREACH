@@ -23,14 +23,14 @@ public class GasTankHolder : MonoBehaviour {
 	//the holder must be locked and filled with a tank in order to activate
 	void Activate() {
 		if (locked || tank == null) return;
-		interchange.ActivateTank(tank, type);
+		interchange.AddTank(tank, type);
 		locked = true;
 	}
 	
 	//the holder must be locked, filled with a tank, and activated in order to deactivate
 	void Deactivate() {
 		if (!locked || tank == null) return;
-		interchange.DeactivateTank(tank, type);
+		interchange.RemoveTank(tank, type);
 		locked = false;
 	}
 }
