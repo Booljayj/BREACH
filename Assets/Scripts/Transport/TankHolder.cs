@@ -1,10 +1,10 @@
 using UnityEngine;
 using System.Collections;
 
-public class GasTankHolder : MonoBehaviour {
+public class TankHolder : MonoBehaviour {
 	public GasInterchange interchange;
 	
-	public GasTank tank;
+	public Tank tank;
 	public string type;
 	
 	bool locked = false;
@@ -14,7 +14,7 @@ public class GasTankHolder : MonoBehaviour {
 		return false;
 	}
 	public void Connect(GameObject obj) {
-		tank = obj.GetComponent<GasTank>();
+		tank = obj.GetComponent<Tank>();
 	}
 	public void Disconnect(GameObject obj) {
 		tank = null;

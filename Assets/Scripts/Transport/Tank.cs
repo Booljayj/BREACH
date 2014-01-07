@@ -8,7 +8,7 @@ public enum GasTankState {
 	Full,
 }
 
-public class GasTank : MonoBehaviour {
+public class Tank : MonoBehaviour {
 	public Atmosphere atmosphere;
 
 	public float MaxPressure = 200f; // kPa

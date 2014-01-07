@@ -1,7 +1,7 @@
 using UnityEngine;
 using System.Collections;
 
-public class ScrubberTank : MonoBehaviour {
+public class Scrubber : MonoBehaviour {
 	public float curCapacity;
 	public float maxCapacity;
 	
