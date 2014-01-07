@@ -22,81 +22,98 @@ using UnityEngine;
 using System.Collections;
 
 public class Interaction : MonoBehaviour {
-	/*
-	 * When right click is pressed:
-	 * if the character is zoomed into a panel, zoom out
-	 * if the character is facing a panel, zoom in
-	 * if the character is facing a plug, attempt to use the plug
-	 * if the character is facing an item, attempt to pick it up
-	 * if the character is holding an item, drop it
-	 */
-	public Transform pointer;
+	public Transform head;
 	public float range;
-	public float smoothing = 2f;
-	
-	public string panelTag;
-	public string plugTag;
-	public string itemTag;
-	
+	public float zoomSpeed;
+	public LayerMask interactionLayer;
+
+	GameObject held;
+	Plug plug;
+	Item item;
+	Panel panel;
+
 	Ray ray;
 	RaycastHit hit;
-	Transform hitObj;
-	enum Facing {None, Panel, Plug, Item};
-	Facing facing;
-	
-	Transform held;
 	bool zoomed;
-	
+	bool working = false;
+
 	void Update() {
-		ray = new Ray(pointer.position, pointer.forward);
-		if (Physics.Raycast(ray, out hit, range)) {
-			if (hit.transform.tag == panelTag)
-				facing = Facing.Panel;
-			else if (hit.transform.tag == plugTag)
-				facing = Facing.Plug;
-			else if (hit.transform.tag == itemTag)
-				facing = Facing.Item;
-			else
-				facing = Facing.None;
-		}
-		
-		if (Input.GetMouseButtonDown(1)) {
-			if (zoomed) {
-				zoomed = false;
-				StopAllCoroutines();
-				StartCoroutine("ZoomToHead", pointer);
-			} else if (facing == Facing.Panel) {
-				zoomed = true;
-				PanelInteractor panel = hitObj.GetComponent<PanelInteractor>();
-				StopAllCoroutines();
-				StartCoroutine("ZoomToPanel", panel.camTarget);
-				//get the panel component
-				//stop all coroutines
-				//start coroutine zoomtopanel, panel.camtarget
-			} else if (facing == Facing.Plug) {
-			} else if (facing == Facing.Item) {
+		if (!Input.GetMouseButtonDown(1) || working) return;
+
+		if (zoomed) {
+			zoomed = false;
+			StopAllCoroutines();
+			StartCoroutine(ZoomTo(head, false));
+		} else {
+			ray = new Ray(head.position, head.forward);
+			Physics.Raycast(ray, out hit, range, interactionLayer.value);
+			
+			if (held != null) { //we are holding something
+				if (hit.collider != null && IsPlug(hit.transform) && plug.CanConnect(held.GetComponent<Item>())) {
+					//attempt to connect the held item
+				} else {
+					//drop the held item
+				}
+			} else {
+				if (hit.collider != null && IsPlug(hit.transform) && plug.CanDisconnect()) { //we clicked on a plug, which has an item
+					//attempt to disconnect the plug
+				} else if (hit.collider != null && IsItem(hit.transform)) { //we clicked on a free item, so pick it up
+					//attempt to pick up the item
+				} else if (hit.collider != null && IsPanel(hit.transform)) { //zooming in to a panel
+					zoomed = true;
+					StopAllCoroutines();
+					StartCoroutine(ZoomTo(panel.camTarget, true));
+				}
 			}
 		}
 	}
-	
-	IEnumerator ZoomToHead(Transform target) {
-		Transform cam = Camera.main.transform;
-		while (Vector3.Distance(target.position, cam.position) > .05f && Quaternion.Angle(target.rotation, cam.rotation) > .05f) {
-			cam.position = Vector3.Lerp(cam.position, target.position, smoothing*Time.deltaTime);
-			cam.rotation = Quaternion.Lerp(cam.rotation, target.rotation, smoothing*Time.deltaTime);
-			yield return null;
-		}
-		SendMessage("Freeze", false);
+
+	bool IsPlug(Transform trans) {
+		plug = trans.GetComponent<Plug>();
+		if (plug != null) return true;
+		return false;
 	}
-	
-	IEnumerator ZoomToPanel(Transform target) {
-		Transform cam = Camera.main.transform;
+
+	bool IsPanel(Transform trans) {
+		panel = trans.GetComponent<Panel>();
+		if (panel != null) return true;
+		return false;
+	}
+
+	bool IsItem(Transform trans) {
+		item = trans.GetComponent<Item>();
+		if (item != null) return true;
+		return false;
+	}
+
+	IEnumerator ZoomTo(Transform target, bool freeze) {
 		SendMessage("Freeze", true);
-		while (Vector3.Distance(target.position, cam.position) > .05f && Quaternion.Angle(target.rotation, cam.rotation) > .05f) {
-			cam.position = Vector3.Lerp(cam.position, target.position, smoothing*Time.deltaTime);
-			cam.rotation = Quaternion.Lerp(cam.rotation, target.rotation, smoothing*Time.deltaTime);
+		while(Vector3.Distance(transform.position, target.position) > .05f || Quaternion.Angle(transform.rotation, target.rotation) > .05f) {
+			transform.position = Vector3.Lerp(transform.position, target.position, Time.deltaTime*zoomSpeed);
+			transform.rotation = Quaternion.Lerp(transform.rotation, target.rotation, Time.deltaTime*zoomSpeed);
 			yield return null;
 		}
+		transform.position = target.position;
+		transform.rotation = target.rotation;
+		if (!freeze) SendMessage("Freeze", false);
+	}
+
+	IEnumerator PickItem(Item item) {
+		yield return null;
+	}
+
+	IEnumerator DropItem(Item item) {
+		yield return null;
+	}
+
+	IEnumerator PlugConnect(Plug plug) {
+		held.transform.position = plug.transform.position;
+		plug.Connect(held);
+		yield return null;
+	}
+
+	IEnumerator PlugDisconnect(Plug plug) {
+		yield return null;
 	}
 }
 

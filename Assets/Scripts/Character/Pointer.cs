@@ -28,7 +28,7 @@ public class Pointer : MonoBehaviour {
 	Ray ray;
 	RaycastHit hit;
 	
-	Activator activator = null;
+	ActivatorOld activator = null;
 	bool activating = false;
 	public DelayedActivate delayed;
 	public Transform stored;
@@ -42,7 +42,7 @@ public class Pointer : MonoBehaviour {
 			//we're not currently using an activator, so actively search for a new one and listen to start activating.
 			ray = new Ray(head.position, head.forward);
 			if (Physics.Raycast(ray, out hit, range)) {
-				activator = (Activator)hit.transform.GetComponent(typeof(Activator));
+				activator = (ActivatorOld)hit.transform.GetComponent(typeof(ActivatorOld));
 				
 				if (activator != null && Input.GetMouseButtonDown(1)) {
 					activating = activator.Activate(gameObject, this); //started a new activator

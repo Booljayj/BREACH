@@ -21,7 +21,7 @@
 using UnityEngine;
 using System.Collections;
 
-public class PanelActivator : MonoBehaviour, Activator {
+public class PanelActivator : MonoBehaviour, ActivatorOld {
 	public Transform camTarget;
 	public Vector3 centerOffset;
 	public float smoothing;

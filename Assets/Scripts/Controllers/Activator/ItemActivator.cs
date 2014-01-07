@@ -21,7 +21,7 @@
 using UnityEngine;
 using System.Collections;
 
-public class ItemActivator : MonoBehaviour, Activator {
+public class ItemActivator : MonoBehaviour, ActivatorOld {
 	public bool Activate(GameObject character, Pointer pointer) {
 		if (pointer.stored != null) return false;
 		
