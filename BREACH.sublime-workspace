@@ -4,6 +4,26 @@
 		"selected_items":
 		[
 			[
+				"Pro",
+				"PropertyGroup"
+			],
+			[
+				"gMass",
+				"gMasses"
+			],
+			[
+				"Atmo",
+				"AtmosphereBeta"
+			],
+			[
+				"Proper",
+				"Properties"
+			],
+			[
+				"in",
+				"indexer	indexer, this"
+			],
+			[
 				"sy",
 				"System"
 			]
@@ -12,28 +32,48 @@
 	"buffers":
 	[
 		{
-			"file": "Assets/Standard Assets/Scripts/Environment/AtmosphereBeta.cs",
+			"contents": "class Hands {\n	delegate bool HandsHandler(RaycastHit hit, Hands hands);\n	HandHandler handler;\n\n	Activator activator;\n	Item heldItem;\n\n	void OnMouseDown() {\n		if (!Input.GetMouseButton(1)) return;\n\n		//raycast\n		if (handler != null) {\n			if (handler(hit)) {\n				handler == null;\n			}\n		} else {\n			//find an object interiting from Activator, run its activation\n			activator = hit.collider.GetComponent(\"Activator\") as Activator;\n			if (activator != null) {\n				activator.Activate();\n			}\n		}\n	}\n\n	public void Freeze(bool on) {\n		SendMessage(\"Freeze\", on);\n	}\n}\n\ninterface Activator {\n	void Activate(Hands hands);\n}\n\n/*\n\nHands is a class which will simulate the actions the player can perform using their hands.\n\nWhen an activator is right-clicked, it's activate method is called. In the case of a simple object, this will perform some action. For a more complex object, it can perform some action then wait until the next time right\nclick is pressed.\n\nFor an item, the activate method starts a coroutine which parents it to the player and moves it into position. After starting the coroutine, it sets inter.handler to a second function which will do one of two things. If the handler shows a hit against a valid plug, it will remove the item from the player and insert it into the plug (possibly by calling a separate method on the plug). If there is no plug, it will simply drop the item. In both cases it will stop all coroutines.\n\nFor a plug, the activate method will determine if the current plugged in item can be transfered to the player. If it cannot, no further action needs to be taken.\n\nFor a panel, the activate method starts a zooming corountine, and sets handler to be a function that will un-zoom.\n\nHandler may return false, which will cause the Interaction class to ignore the click as though it never happened. The method \"Freeze\" may also be called, which will stop the camera or the character from moving.\n\n*/\n\nclass Item : Activator {\n	public Activate(Hands hands) {\n		if (hands.heldItem != null) return;\n		StartCoroutine(Pick(hands));\n		hands.handler = SecondClick;\n	}\n\n	bool SecondClick(RaycastHit hit, Hands hands) {\n		StopAllCoroutines();\n\n		Plug plug;\n		if (hit.collider != null) {\n			plug = hit.collider.GetComponent<Plug>();\n			if (plug != null) {\n				plug.Connect(this);\n			}\n		} else {\n			StartCoroutine(Drop(hands));\n		}\n	}\n}",
 			"settings":
 			{
-				"buffer_size": 7068,
+				"buffer_size": 2353,
 				"line_ending": "Unix"
 			}
 		},
 		{
-			"file": "Assets/Standard Assets/Scripts/Mechanics/Airlock.cs",
+			"file": "/Users/justin/Library/Application Support/Steam/SteamApps/common/XCom-Enemy-Unknown/XCOMData/XComGame/Config/DefaultEngine.ini",
 			"settings":
 			{
-				"buffer_size": 3859,
-				"line_ending": "Unix"
+				"buffer_size": 65301,
+				"line_ending": "Windows"
 			}
 		}
 	],
-	"build_system": "",
+	"build_system": "Packages/Unity3D Build System/Unity.sublime-build",
 	"command_palette":
 	{
-		"height": 167.0,
+		"height": 187.0,
 		"selected_items":
 		[
+			[
+				"c#",
+				"Set Syntax: C#"
+			],
+			[
+				"snippet",
+				"Snippet: Class"
+			],
+			[
+				"snipp",
+				"Snippet: Method (Main)"
+			],
+			[
+				"remov",
+				"Package Control: Remove Package"
+			],
+			[
+				"insta",
+				"Package Control: Install Package"
+			],
 			[
 				"instal",
 				"Package Control: Install Package"
@@ -55,14 +95,6 @@
 				"Licence Snippet: GPLv2"
 			],
 			[
-				"remov",
-				"Package Control: Remove Package"
-			],
-			[
-				"snippet",
-				"Snippet: other"
-			],
-			[
 				"side",
 				"View: Toggle Side Bar"
 			],
@@ -71,7 +103,7 @@
 				"View: Toggle Side Bar"
 			]
 		],
-		"width": 580.0
+		"width": 449.0
 	},
 	"console":
 	{
@@ -88,23 +120,43 @@
 	},
 	"file_history":
 	[
+		"/Users/justin/Projects/NW/test.md",
+		"/Users/justin/Projects/NW/site.json",
+		"/Users/justin/Projects/NW/NW.js",
+		"/Users/justin/Library/Application Support/Sublime Text 2/Packages/Default/Preferences.sublime-settings",
+		"/Users/justin/Library/Application Support/Sublime Text 2/Packages/User/Preferences.sublime-settings",
+		"/Users/justin/Projects/Unknown Worlds/Assets/Standard Assets/Character/SkillList.cs",
+		"/Users/justin/Projects/Unknown Worlds/Assets/Standard Assets/Character/ResourceList.cs",
+		"/Users/justin/Projects/BREACH/Assets/Standard Assets/Scripts/General/ItemCarrier.cs",
+		"/Users/justin/Projects/BREACH/Assets/Standard Assets/Scripts/General/Item.cs",
+		"/Users/justin/Projects/BREACH/Assets/Standard Assets/Scripts/Control/Plug.cs",
+		"/Users/justin/Projects/Unknown Worlds/Assets/Standard Assets/Data/Power.cs",
+		"/Users/justin/Projects/Unknown Worlds/Assets/Standard Assets/Data/Keywords.cs",
+		"/Users/justin/Projects/Unknown Worlds/Assets/Standard Assets/Character/PowerList.cs",
+		"/Users/justin/Projects/Tactonics/Characters/Skills.md",
+		"/Users/justin/Projects/BREACH/Assets/Standard Assets/Scripts/General/Pickup.cs",
+		"/Users/justin/Projects/BREACH/Assets/Standard Assets/Scripts/General/PickupCarrier.cs",
+		"/Users/justin/Projects/BREACH/Assets/Standard Assets/Scripts/Mechanics/Airlock.cs",
+		"/Users/justin/Projects/BREACH/Assets/Standard Assets/Scripts/Environment/Property.cs",
+		"/Users/justin/Projects/BREACH/Assets/Standard Assets/Scripts/Environment/AtmosphereBeta.cs",
+		"/Users/justin/Library/Application Support/Sublime Text 2/Packages/User/C#/Dynamic Indexer.sublime-snippet",
+		"/Users/justin/Library/Application Support/Sublime Text 2/Packages/User/C#/indexer, this.sublime-snippet",
+		"/Users/justin/Projects/BREACH/BREACH.sublime-project",
+		"/Users/justin/Library/Application Support/Sublime Text 2/Packages/User/Monodevelop Build.sublime-build",
+		"/Users/justin/Projects/BREACH/Assets/Standard Assets/Scripts/General/DragRigidbody.js",
+		"/Users/justin/Projects/BREACH/BREACH.sublime-workspace",
 		"/Users/justin/Projects/BREACH/README.md",
 		"/Users/justin/Library/Application Support/Sublime Text 2/Packages/User/Gist.sublime-settings",
-		"/Users/justin/Library/Application Support/Sublime Text 2/Packages/User/C#/indexer, this.sublime-snippet",
 		"/Users/justin/Projects/BREACH/Assets/Standard Assets/Scripts/Control/EnvironmentalControlSystem.cs",
 		"/Users/justin/Projects/BREACH/Assets/Standard Assets/DefaultShip.blend",
-		"/Users/justin/Library/Application Support/Sublime Text 2/Packages/User/Preferences.sublime-settings",
 		"/Users/justin/Library/Application Support/Sublime Text 2/Packages/User/Distraction Free.sublime-settings",
-		"/Users/justin/Library/Application Support/Sublime Text 2/Packages/Default/Preferences.sublime-settings",
 		"/Users/justin/Projects/BREACH/Assets/Standard Assets/Character Controllers/3rd Person Controller.prefab",
 		"/Users/justin/Projects/BREACH/Assets/Standard Assets/Scripts/Mechanics/GasTank.cs",
-		"/Users/justin/Projects/BREACH/Assets/Standard Assets/Scripts/Mechanics/Valve.cs",
-		"/Users/justin/Projects/BREACH/Assets/Standard Assets/Scripts/Environment/AtmosphereBeta.cs",
-		"/Users/justin/Projects/BREACH/Assets/Standard Assets/Scripts/Mechanics/Airlock.cs"
+		"/Users/justin/Projects/BREACH/Assets/Standard Assets/Scripts/Mechanics/Valve.cs"
 	],
 	"find":
 	{
-		"height": 0.0
+		"height": 35.0
 	},
 	"find_in_files":
 	{
@@ -118,6 +170,9 @@
 		"case_sensitive": false,
 		"find_history":
 		[
+			"movie",
+			"you",
+			"GasProperty"
 		],
 		"highlight": true,
 		"in_selection": false,
@@ -135,23 +190,22 @@
 	"groups":
 	[
 		{
-			"selected": 0,
+			"selected": 1,
 			"sheets":
 			[
 				{
 					"buffer": 0,
-					"file": "Assets/Standard Assets/Scripts/Environment/AtmosphereBeta.cs",
 					"settings":
 					{
-						"buffer_size": 7068,
+						"buffer_size": 2353,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								0,
-								0
+								1594,
+								1594
 							]
 						],
 						"settings":
@@ -160,40 +214,33 @@
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 0.0,
+						"translation.y": 224.0,
 						"zoom_level": 1.0
 					},
 					"type": "text"
-				}
-			]
-		},
-		{
-			"selected": 0,
-			"sheets":
-			[
+				},
 				{
 					"buffer": 1,
-					"file": "Assets/Standard Assets/Scripts/Mechanics/Airlock.cs",
+					"file": "/Users/justin/Library/Application Support/Steam/SteamApps/common/XCom-Enemy-Unknown/XCOMData/XComGame/Config/DefaultEngine.ini",
 					"settings":
 					{
-						"buffer_size": 3859,
+						"buffer_size": 65301,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								0,
-								0
+								63258,
+								63258
 							]
 						],
 						"settings":
 						{
-							"syntax": "Packages/C#/C#.tmLanguage",
-							"translate_tabs_to_spaces": false
+							"syntax": "Packages/Text/Plain text.tmLanguage"
 						},
 						"translation.x": 0.0,
-						"translation.y": 0.0,
+						"translation.y": 29085.0,
 						"zoom_level": 1.0
 					},
 					"type": "text"
@@ -203,11 +250,11 @@
 	],
 	"incremental_find":
 	{
-		"height": 0.0
+		"height": 34.0
 	},
 	"input":
 	{
-		"height": 0.0
+		"height": 31.0
 	},
 	"layout":
 	{
@@ -218,18 +265,11 @@
 				0,
 				1,
 				1
-			],
-			[
-				1,
-				0,
-				2,
-				1
 			]
 		],
 		"cols":
 		[
 			0.0,
-			0.5,
 			1.0
 		],
 		"rows":
@@ -239,6 +279,10 @@
 		]
 	},
 	"menu_visible": true,
+	"output.exec":
+	{
+		"height": 259.0
+	},
 	"replace":
 	{
 		"height": 0.0

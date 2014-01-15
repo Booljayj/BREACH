@@ -2,19 +2,23 @@ using UnityEngine;
 using System.Collections;
 
 [RequireComponent(typeof(Collider))]
-public class Plug : MonoBehaviour {
+public class Plug : Activator {
 	public Item.ItemType type;
 	public PlugHandler handler;
-	GameObject connected;
+	Item connected;
+
+	public override void Activate(Hands hands) {
+		Debug.LogWarning("Not implemented yet");
+	}
 	
 	public bool CanConnect(Item item) {
 		if (handler == null || handler.Locked()) return false;
 		if (item.type != type) return false;
 		return true;
 	}
-	public void Connect(GameObject obj) {
+	public void Connect(Item obj) {
 		connected = obj;
-		handler.Connect(connected);
+		//handler.Connect(connected);
 	}
 
 	public bool CanDisconnect() {
@@ -22,8 +26,8 @@ public class Plug : MonoBehaviour {
 		if (connected == null) return false;
 		return true;
 	}
-	public GameObject Disconnect() {
-		handler.Disconnect(connected);
+	public Item Disconnect() {
+		//handler.Disconnect(connected);
 		return connected;
 	}
 }

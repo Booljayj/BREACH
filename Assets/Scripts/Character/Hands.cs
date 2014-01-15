@@ -21,15 +21,17 @@
 using UnityEngine;
 using System.Collections;
 
+[RequireComponent(typeof(Rigidbody))]
 public class Hands : MonoBehaviour {
 	public Transform head; //the transform used to point the raycast;
 	public float distance = 1.5f; //the raycast/interactin distance.
+	public LayerMask activatorLayer; //the layer that all activators are on.
 
 	public delegate bool NextHandler(Hands hands);
 	public NextHandler next;
 	
-	public Activator activator {get; private set;} //the current interface;
-	public Item held {get; private set;} //the currently held item
+	public Activator activator {get; private set;} //the current activator, can be null
+	public Item held {get; private set;} //the currently held item, can be null
 
 	RaycastHit hit;
 	Ray ray;
@@ -39,7 +41,7 @@ public class Hands : MonoBehaviour {
 
 		//perform a raycast, set the hit object as inter
 		ray = new Ray(head.position, head.forward);
-		if (Physics.Raycast(ray, out hit, distance)) {
+		if (Physics.Raycast(ray, out hit, distance, activatorLayer.value)) {
 			activator = hit.transform.GetComponent<Activator>();
 		} else {
 			activator = null;
@@ -48,12 +50,12 @@ public class Hands : MonoBehaviour {
 		if (next != null) { //is there an action queued up?
 			if (next(this)) //perform the action, remove it if it returns true;
 				next = null;
-		} else { //activate the interface
+		} else if (activator != null) { //activate the activator
 			activator.Activate(this);
 		}
 	}
 }
 
-public class Activator : MonoBehaviour {
-	public void Activate(Hands hands) {}
+public abstract class Activator : MonoBehaviour {
+	public abstract void Activate(Hands hands);
 }
