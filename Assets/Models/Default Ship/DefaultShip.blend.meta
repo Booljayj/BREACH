@@ -29,6 +29,13 @@ ModelImporter:
     100046: End_Cap_001
     100048: Floor_1x2
     100050: Wall_v2
+    100052: Corner_In_v2
+    100054: Corner_Out_v2
+    100056: Door_Frame_v2
+    100058: Door_v2
+    100060: End_Cap_v2
+    100062: Wall_Half_v2
+    100064: Floor_1x1
     400000: Cube
     400002: Cube_001
     400004: Cube_002
@@ -55,6 +62,13 @@ ModelImporter:
     400046: End_Cap_001
     400048: Floor_1x2
     400050: Wall_v2
+    400052: Corner_In_v2
+    400054: Corner_Out_v2
+    400056: Door_Frame_v2
+    400058: Door_v2
+    400060: End_Cap_v2
+    400062: Wall_Half_v2
+    400064: Floor_1x1
     2300000: Cube
     2300002: Cube_001
     2300004: Cube_002
@@ -80,6 +94,13 @@ ModelImporter:
     2300044: End_Cap_001
     2300046: Floor_1x2
     2300048: Wall_v2
+    2300050: Corner_In_v2
+    2300052: Corner_Out_v2
+    2300054: Door_Frame_v2
+    2300056: Door_v2
+    2300058: End_Cap_v2
+    2300060: Wall_Half_v2
+    2300062: Floor_1x1
     3300000: Cube
     3300002: Cube_001
     3300004: Cube_002
@@ -105,6 +126,13 @@ ModelImporter:
     3300044: End_Cap_001
     3300046: Floor_1x2
     3300048: Wall_v2
+    3300050: Corner_In_v2
+    3300052: Corner_Out_v2
+    3300054: Door_Frame_v2
+    3300056: Door_v2
+    3300058: End_Cap_v2
+    3300060: Wall_Half_v2
+    3300062: Floor_1x1
     4300000: Cube_007
     4300002: Cube_006
     4300004: Cube_005
@@ -130,6 +158,13 @@ ModelImporter:
     4300044: End_Cap_001
     4300046: Floor_1x2
     4300048: Wall_v2
+    4300050: Door_v2
+    4300052: End_Cap_v2
+    4300054: Wall_Half_v2
+    4300056: Door_Frame_v2
+    4300058: Corner_In_v2
+    4300060: Corner_Out_v2
+    4300062: Floor_1x1
     6400000: Corner_In
     6400002: Corner_Out
     6400004: Door
@@ -143,6 +178,13 @@ ModelImporter:
     6400020: Wall
     6400022: Wall_Half
     6400024: Wall_v2
+    6400026: Corner_In_v2
+    6400028: Corner_Out_v2
+    6400030: Door_Frame_v2
+    6400032: Door_v2
+    6400034: End_Cap_v2
+    6400036: Wall_Half_v2
+    6400038: Floor_1x1
     7400000: Default Take
     9500000: //RootNode
   materials:
@@ -152,11 +194,13 @@ ModelImporter:
   animations:
     legacyGenerateAnimations: 4
     bakeSimulation: 0
+    optimizeGameObjects: 0
     animationCompression: 1
     animationRotationError: .5
     animationPositionError: .5
     animationScaleError: .5
     animationWrapMode: 0
+    extraExposedTransformPaths: []
     clipAnimations: []
     isReadable: 1
   meshes:
@@ -184,7 +228,6 @@ ModelImporter:
   humanDescription:
     human: []
     skeleton: []
-    handles: []
     armTwist: .5
     foreArmTwist: .5
     upperLegTwist: .5
@@ -194,6 +237,5 @@ ModelImporter:
     feetSpacing: 0
     rootMotionBoneName: 
   lastHumanDescriptionAvatarSource: {instanceID: 0}
-  additionalBone: 1
   animationType: 0
   userData: 
