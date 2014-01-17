@@ -1,36 +1,31 @@
 using UnityEngine;
 using System.Collections;
 
-public class TankHolder : MonoBehaviour {
+public class TankHolder : Holder {
 	public GasInterchange interchange;
-	
-	public Tank tank;
-	public string type;
-	
-	bool locked = false;
-	
-	public bool Locked() {
-		if (locked) return true;
-		return false;
+	public string channel = "None";
+
+	Tank connectedTank;
+
+	public override void Connect(Item item) {
+		connectedTank = item.GetComponent<Tank>();
+		if (connectedTank == null)
+			throw new MissingComponentException("TankHolder was expecting a Tank component");
 	}
-	public void Connect(GameObject obj) {
-		tank = obj.GetComponent<Tank>();
+
+	public override void Disconnect() {
+		connectedTank = null;
 	}
-	public void Disconnect(GameObject obj) {
-		tank = null;
-	}
-	
-	//the holder must be locked and filled with a tank in order to activate
-	void Activate() {
-		if (locked || tank == null) return;
-		interchange.AddTank(tank, type);
+
+	public override void Lock() {
+		if (locked || connectedTank == null) return;
+		interchange.AddTank(connectedTank, channel);
 		locked = true;
 	}
-	
-	//the holder must be locked, filled with a tank, and activated in order to deactivate
-	void Deactivate() {
-		if (!locked || tank == null) return;
-		interchange.RemoveTank(tank, type);
+
+	public override void Unlock() {
+		if (!locked || connectedTank == null) return;
+		interchange.RemoveTank(connectedTank, channel);
 		locked = false;
 	}
 }

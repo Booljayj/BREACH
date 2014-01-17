@@ -18,6 +18,7 @@
 //
 //  You should have received a copy of the GNU General Public License
 //  along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
 using UnityEngine;
 using System.Collections;
 
@@ -25,13 +26,13 @@ using System.Collections;
 public class Hands : MonoBehaviour {
 	public Transform head; //the transform used to point the raycast;
 	public float distance = 1.5f; //the raycast/interactin distance.
-	public LayerMask activatorLayer; //the layer that all activators are on.
+	public LayerMask interactorLayer; //the layer that all activators are on.
 
-	public delegate bool NextHandler(Hands hands);
-	public NextHandler next;
+	public delegate bool NextInteract(Hands hands);
+	public NextInteract next;
 	
-	public Activator activator {get; private set;} //the current activator, can be null
-	public Item held {get; private set;} //the currently held item, can be null
+	public Interactor interactor {get; private set;} //the current activator, can be null
+	public Item held {get; set;} //the currently held item, can be null
 
 	RaycastHit hit;
 	Ray ray;
@@ -41,21 +42,21 @@ public class Hands : MonoBehaviour {
 
 		//perform a raycast, set the hit object as inter
 		ray = new Ray(head.position, head.forward);
-		if (Physics.Raycast(ray, out hit, distance, activatorLayer.value)) {
-			activator = hit.transform.GetComponent<Activator>();
+		if (Physics.Raycast(ray, out hit, distance, interactorLayer.value)) {
+			interactor = hit.transform.GetComponent<Interactor>();
 		} else {
-			activator = null;
+			interactor = null;
 		}
 
 		if (next != null) { //is there an action queued up?
 			if (next(this)) //perform the action, remove it if it returns true;
 				next = null;
-		} else if (activator != null) { //activate the activator
-			activator.Activate(this);
+		} else if (interactor != null) { //activate the activator
+			interactor.Interact(this);
 		}
 	}
 }
 
-public abstract class Activator : MonoBehaviour {
-	public abstract void Activate(Hands hands);
+public abstract class Interactor : MonoBehaviour {
+	public abstract void Interact(Hands hands);
 }

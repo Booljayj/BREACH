@@ -18,27 +18,23 @@
 //
 //  You should have received a copy of the GNU General Public License
 //  along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
 using UnityEngine;
 using System.Collections;
 
 [RequireComponent(typeof(Rigidbody))]
-public class Item : Activator {
-	public enum ItemType {Tank, Scrubber, Cell};
-	public ItemType type;
+public class Item : Interactor {
+	public enum Type {Tank, Scrubber, Cell};
+	public Type itemType;
 
 	SpringJoint joint;
 
-	void Start() {
-
-	}
-
-	public override void Activate(Hands hands) {
+	public override void Interact(Hands hands) {
 		if (hands.held != null) return; //this shouldn't ever happen. sanity check
 
-		//rigidbody.constraints = RigidbodyConstraints.FreezeRotation;
 		Physics.IgnoreCollision(collider, hands.transform.parent.collider);
 		transform.parent = hands.transform;
-		transform.position = hands.transform.position;
+		rigidbody.useGravity = false;
 
 		joint = gameObject.AddComponent<SpringJoint>();
 		joint.spring = 50f;
@@ -47,24 +43,25 @@ public class Item : Activator {
 		joint.connectedBody = hands.rigidbody;
 		joint.connectedAnchor = Vector3.zero;
 		joint.anchor = Vector3.zero;
-		rigidbody.useGravity = false;
 
-		hands.next = NextActivate;
+		hands.next = NextInteract;
 	}
 
-	public bool NextActivate(Hands hands) {
-		//rigidbody.constraints = RigidbodyConstraints.None;
+	public bool NextInteract(Hands hands) {
+		if (hands.interactor != null) {
+			Socket socket = hands.interactor.GetComponent<Socket>();
+			if (socket != null && socket.CanConnectItem(this)) {
+				socket.ConnectItem(this);
+			}
+		}
+
 		Physics.IgnoreCollision(collider, hands.transform.parent.collider, false);
 		transform.parent = null;
-
 		rigidbody.useGravity = true;
+
 		Destroy (joint);
 
 		return true;
-	}
-
-	IEnumerator PickUp() {
-		yield return null;
 	}
 }
 

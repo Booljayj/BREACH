@@ -18,11 +18,12 @@
 //
 //  You should have received a copy of the GNU General Public License
 //  along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
 using UnityEngine;
 using System.Collections;
 
 [RequireComponent(typeof(Collider))]
-public class Panel : Activator {
+public class Panel : Interactor {
 	public Transform camTarget;
 	public Vector3 lookOffset;
 	public float smoothing = 1f;
@@ -31,16 +32,16 @@ public class Panel : Activator {
 		camTarget.LookAt(transform.position+transform.rotation*lookOffset);
 	}
 
-	public override void Activate(Hands hands) {
+	public override void Interact(Hands hands) {
 		StopAllCoroutines();
-		Debug.Log("Zooming to panel");
+		//Debug.Log("Zooming to panel");
 		StartCoroutine(ZoomTo(camTarget, hands.transform.parent.gameObject, true));
-		hands.next = NextActivate;
+		hands.next = NextInteract;
 	}
 
-	public bool NextActivate(Hands hands) {
+	public bool NextInteract(Hands hands) {
 		StopAllCoroutines();
-		Debug.Log("Zooming to head");
+		//Debug.Log("Zooming to head");
 		StartCoroutine(ZoomTo(hands.head, hands.transform.parent.gameObject, false));
 		return true;
 	}
