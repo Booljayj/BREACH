@@ -11,21 +11,25 @@ public class TankHolder : Holder {
 		connectedTank = item.GetComponent<Tank>();
 		if (connectedTank == null)
 			throw new MissingComponentException("TankHolder was expecting a Tank component");
+		OnConnect();
 	}
 
 	public override void Disconnect() {
 		connectedTank = null;
+		OnDisconnect();
 	}
 
 	public override void Lock() {
-		if (locked || connectedTank == null) return;
+		if (isLocked || connectedTank == null) return;
 		interchange.AddTank(connectedTank, channel);
-		locked = true;
+		isLocked = true;
+		OnLock();
 	}
 
 	public override void Unlock() {
-		if (!locked || connectedTank == null) return;
+		if (!isLocked || connectedTank == null) return;
 		interchange.RemoveTank(connectedTank, channel);
-		locked = false;
+		isLocked = false;
+		OnUnlock();
 	}
 }

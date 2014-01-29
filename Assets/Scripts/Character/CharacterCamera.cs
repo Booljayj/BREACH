@@ -47,6 +47,9 @@ public class CharacterCamera : MonoBehaviour {
 	}
 	
 	public void Freeze(bool ifrozen) {
+		if (ifrozen) Screen.lockCursor = false;
+		else Screen.lockCursor = true;
+
 		frozen = ifrozen;
 	}
 }

@@ -33,9 +33,14 @@ public class Hands : MonoBehaviour {
 	
 	public Interactor interactor {get; private set;} //the current activator, can be null
 	public Item held {get; set;} //the currently held item, can be null
+	public ConfigurableJoint joint {get; private set;}
 
 	RaycastHit hit;
 	Ray ray;
+
+	void Start() {
+		joint = GetComponent<ConfigurableJoint>();
+	}
 
 	void Update() {
 		if (!Input.GetMouseButtonDown(1)) return;

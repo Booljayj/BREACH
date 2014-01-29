@@ -27,27 +27,37 @@ public class Item : Interactor {
 	public enum Type {Tank, Scrubber, Cell};
 	public Type itemType;
 
-	SpringJoint joint;
-
 	public override void Interact(Hands hands) {
-		if (hands.held != null) return; //this shouldn't ever happen. sanity check
+		hands.held = this;
+		Debug.Log("Picking up "+name);
 
-		Physics.IgnoreCollision(collider, hands.transform.parent.collider);
+		foreach (Transform child in transform) {
+			if (child.collider != null) {
+				Physics.IgnoreCollision(child.collider, hands.transform.parent.collider);
+			}
+		}
+		Debug.Log("Ignoring collision between "+hands.transform.parent.name+" and "+name);
 		transform.parent = hands.transform;
 		rigidbody.useGravity = false;
 
-		joint = gameObject.AddComponent<SpringJoint>();
-		joint.spring = 50f;
-		joint.damper = .9f;
-		joint.maxDistance = .01f;
-		joint.connectedBody = hands.rigidbody;
-		joint.connectedAnchor = Vector3.zero;
-		joint.anchor = Vector3.zero;
+		hands.joint.connectedBody = rigidbody;
+		hands.joint.SetTargetRotationLocal(Quaternion.identity, transform.localRotation);
+
+//		joint = hands.gameObject.AddComponent<SpringJoint>();
+//		joint.spring = 50f;
+//		joint.damper = .9f;
+//		joint.maxDistance = .01f;
+//		joint.connectedBody = rigidbody;
+//		joint.connectedAnchor = Vector3.zero;
+//		joint.anchor = Vector3.zero;
 
 		hands.next = NextInteract;
 	}
 
 	public bool NextInteract(Hands hands) {
+		hands.held = null;
+		Debug.Log("Dropping "+name);
+
 		if (hands.interactor != null) {
 			Socket socket = hands.interactor.GetComponent<Socket>();
 			if (socket != null && socket.CanConnectItem(this)) {
@@ -55,13 +65,23 @@ public class Item : Interactor {
 			}
 		}
 
-		Physics.IgnoreCollision(collider, hands.transform.parent.collider, false);
+		foreach (Transform child in transform) {
+			if (child.collider != null) {
+				Physics.IgnoreCollision(child.collider, hands.transform.parent.collider, false);
+			}
+		}
 		transform.parent = null;
 		rigidbody.useGravity = true;
 
-		Destroy (joint);
+		hands.joint.connectedBody = null;
+
+		rigidbody.AddForce(hands.transform.parent.GetComponent<CharacterController>().velocity + rigidbody.velocity + hands.transform.forward*.2f, ForceMode.VelocityChange);
 
 		return true;
 	}
+
+//	void Update() {
+//		Debug.Log(rigidbody.velocity.ToString());
+//	}
 }
 

@@ -5,35 +5,53 @@ using System.Collections;
 public class Socket : Interactor {
 	public Item.Type socketType;
 	public Holder holder;
-	public Item connected;
+	public Item connectedItem;
 
 	public override void Interact(Hands hands) {
-		if (connected != null && hands.held == null) {
-			if (holder != null && !holder.locked) {
+		if (connectedItem != null && hands.held == null) {
+			if (holder != null) {
+				if (holder.isLocked) return;
 				holder.Disconnect();
-				hands.held = connected;
-				connected = null;
-				hands.held.Interact(hands);
 			}
+			hands.held = connectedItem;
+			connectedItem = null;
+			hands.held.Interact(hands);
 		}
 	}
 
 	public bool CanConnectItem(Item item) {
-		if (holder.locked || connected != null || item.itemType != socketType) return false;
+		if (holder.isLocked || connectedItem != null || item.itemType != socketType) return false;
 		else return true;
 	}
 
 	public void ConnectItem(Item item) {
 		item.transform.position = transform.position;
-		connected = item;
+		connectedItem = item;
 	}
 }
 
 public abstract class Holder : MonoBehaviour {
+	public event EventHandler Connected;
+	public event EventHandler Disconnected;
+	public event EventHandler Locked;
+	public event EventHandler Unlocked;
+	public bool isLocked {get; protected set;}
+
 	public abstract void Connect(Item item);
 	public abstract void Disconnect();
-
-	public bool locked {get; protected set;}
 	public abstract void Lock();
 	public abstract void Unlock();
+
+	protected void OnConnect() {
+		if (Connected != null) Connected();
+	}
+	protected void OnDisconnect() {
+		if (Disconnected != null) Disconnected();
+	}
+	protected void OnLock() {
+		if (Locked != null) Locked();
+	}
+	protected void OnUnlock() {
+		if (Unlocked != null) Unlocked();
+	}
 }
