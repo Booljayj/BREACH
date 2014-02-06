@@ -113,17 +113,7 @@ public class GasDictionaryIterator : IEnumerator {
 		get {return Current;}
 	}
 	
-	GasPair Current {
-		get {return new GasPair(keys[index], values[index]);}
-	}
-}
-
-public class GasPair {
-	public string Key {get; private set;}
-	public float Value {get; private set;}
-	
-	public GasPair(string key, float val) {
-		Key = key;
-		Value = val;
+	KeyValuePair<string, float> Current {
+		get {return new KeyValuePair<string, float>(keys[index], values[index]);}
 	}
 }

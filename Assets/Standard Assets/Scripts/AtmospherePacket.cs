@@ -30,7 +30,10 @@ public class AtmospherePacket {
 	}
 	
 	public float this[string type] {
-		get {return gases[type];}
+		get {
+			if (gases.ContainsKey(type)) return gases[type];
+			else return 0f;
+		}
 		set {
 			if (gases.ContainsKey(type)) {
 				mass += value - gases[type];
