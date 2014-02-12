@@ -13,36 +13,36 @@ public class Door : MonoBehaviour {
 	public event EventHandler Sealing;
 	public event EventHandler Sealed;
 
-	public event EventHandler DoorLocked;
-	public event EventHandler DoorUnlocked;
+	public event EventHandler Locked;
+	public event EventHandler Unlocked;
 
-	public event EventHandler DoorAutomatic;
-	public event EventHandler DoorManual;
+	public event EventHandler Automatic;
+	public event EventHandler Manual;
 
-	private bool _locked;
-	public bool Locked {
+	private bool _isLocked;
+	public bool isLocked {
 		get {
-			return _locked;
+			return _isLocked;
 		}
 		set {
-			if (_locked != value) {
-				_locked = value;
-				if (_locked && DoorLocked != null) DoorLocked();
-				if (!_locked && DoorUnlocked != null) DoorUnlocked();
+			if (_isLocked != value) {
+				_isLocked = value;
+				if (_isLocked && Locked != null) Locked();
+				if (!_isLocked && Unlocked != null) Unlocked();
 			}
 		}
 	}
 
-	private bool _automatic;
-	public bool Automatic {
+	private bool _isAutomatic;
+	public bool isAutomatic {
 		get {
-			return _automatic;
+			return _isAutomatic;
 		}
 		set {
-			if (_automatic != value) {
-				_automatic = value;
-				if (_automatic && DoorAutomatic != null) DoorAutomatic();
-				if (!_automatic && DoorManual != null) DoorManual();
+			if (_isAutomatic != value) {
+				_isAutomatic = value;
+				if (_isAutomatic && Automatic != null) Automatic();
+				if (!_isAutomatic && Manual != null) Manual();
 			}
 		}
 	}
@@ -63,7 +63,7 @@ public class Door : MonoBehaviour {
 
 	#region Activation
 	public void Open() {
-		if (_locked || animator.GetBool("Open")) return;
+		if (_isLocked || animator.GetBool("Open")) return;
 
 		animator.SetBool("Open", true);
 		AnimatorStateInfo state = animator.GetCurrentAnimatorStateInfo(0);
@@ -77,7 +77,7 @@ public class Door : MonoBehaviour {
 	}
 	
 	public void Close() {
-		if (_locked || !animator.GetBool("Open")) return;
+		if (_isLocked || !animator.GetBool("Open")) return;
 		if (obstructions.Count > 0) return;
 
 		animator.SetBool("Open", false);

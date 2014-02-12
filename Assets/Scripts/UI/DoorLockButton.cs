@@ -18,8 +18,8 @@ public class DoorLockButton : MonoBehaviour {
 	Color bUnlockedCol;
 	
 	void Start() {
-		door.DoorLocked += IsLocked;
-		door.DoorUnlocked += IsUnlocked;
+		door.Locked += IsLocked;
+		door.Unlocked += IsUnlocked;
 		
 		tUnlockedPos = lockTop.transform.localPosition;
 		bUnlockedPos = lockBottom.transform.localPosition;
@@ -29,7 +29,7 @@ public class DoorLockButton : MonoBehaviour {
 	
 	void OnPress(bool isPressed) {
 		if (isPressed) {
-			door.Locked = !door.Locked;
+			door.isLocked = !door.isLocked;
 		}
 	}
 	

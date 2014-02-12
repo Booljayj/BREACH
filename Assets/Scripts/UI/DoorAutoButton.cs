@@ -13,8 +13,8 @@ public class DoorAutoButton : MonoBehaviour {
 	Color manCol;
 	
 	void Start() {
-		door.DoorAutomatic += IsAutomatic;
-		door.DoorManual += IsManual;
+		door.Automatic += IsAutomatic;
+		door.Manual += IsManual;
 		
 		manRot = radio.transform.localRotation;
 		manCol = radio.GetComponent<UISprite>().color;
@@ -22,7 +22,7 @@ public class DoorAutoButton : MonoBehaviour {
 	
 	void OnPress(bool isPressed) {
 		if (isPressed) {
-			door.Automatic = !door.Automatic;
+			door.isAutomatic = !door.isAutomatic;
 		}
 	}
 	

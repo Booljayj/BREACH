@@ -8,28 +8,34 @@ public class TankHolder : Holder {
 	Tank connectedTank;
 
 	public override void Connect(Item item) {
+		if (animation.isPlaying) return;
+		if (!isOpen) return;
+
 		connectedTank = item.GetComponent<Tank>();
 		if (connectedTank == null)
-			throw new MissingComponentException("TankHolder was expecting a Tank component");
-		OnConnect();
+			throw new MissingComponentException("Tank holder was expecting a tank component");
+		else {
+			isOpen = false;
+			animation.Play("Close");
+		}
 	}
 
 	public override void Disconnect() {
+		if (animation.isPlaying) return;
+		if (isOpen || isActive) return;
+
 		connectedTank = null;
-		OnDisconnect();
 	}
 
-	public override void Lock() {
-		if (isLocked || connectedTank == null) return;
+	public override void Activate() {
+		if (isOpen || connectedTank == null) return;
 		interchange.AddTank(connectedTank, channel);
-		isLocked = true;
-		OnLock();
+		isOpen = true;
 	}
 
-	public override void Unlock() {
-		if (!isLocked || connectedTank == null) return;
+	public override void Deactivate() {
+		if (!isOpen || connectedTank == null) return;
 		interchange.RemoveTank(connectedTank, channel);
-		isLocked = false;
-		OnUnlock();
+		isOpen = false;
 	}
 }

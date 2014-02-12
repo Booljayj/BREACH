@@ -27,13 +27,13 @@ public class DoorProximityTrigger : MonoBehaviour {
 	public Door door;
 
 	void OnTriggerEnter(Collider other) {
-		if (other.tag == "Player" && door.Automatic) {
+		if (other.tag == "Player" && door.isAutomatic) {
 			door.Open();
 		}
 	}
 
 	void OnTriggerExit(Collider other) {
-		if (other.tag == "Player" && door.Automatic) {
+		if (other.tag == "Player" && door.isAutomatic) {
 			door.Close();
 		}
 	}

@@ -48,6 +48,7 @@ public class DoorCenterButton : MonoBehaviour {
 
 			tween = TweenScale.Begin(gameObject, duration, Vector3.Scale(mScale, pressed));
 			tween.method = UITweener.Method.EaseInOut;
+			tween.eventReceiver = null;
 
 			door.Open();
 		}
@@ -57,7 +58,9 @@ public class DoorCenterButton : MonoBehaviour {
 		if (enabled && !mShutdown) {
 			if (!mInitDone) Init();
 
-			TweenScale.Begin(gameObject, duration, isOver ? Vector3.Scale(mScale, hover) : mScale).method = UITweener.Method.EaseInOut;
+			tween = TweenScale.Begin(gameObject, duration, isOver ? Vector3.Scale(mScale, hover) : mScale);
+			tween.method = UITweener.Method.EaseInOut;
+			tween.eventReceiver = null;
 		}
 	}
 

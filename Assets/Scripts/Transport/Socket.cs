@@ -10,7 +10,7 @@ public class Socket : Interactor {
 	public override void Interact(Hands hands) {
 		if (connectedItem != null && hands.held == null) {
 			if (holder != null) {
-				if (holder.isLocked) return;
+				if (holder.isOpen) return;
 				holder.Disconnect();
 			}
 			hands.held = connectedItem;
@@ -20,7 +20,7 @@ public class Socket : Interactor {
 	}
 
 	public bool CanConnectItem(Item item) {
-		if (holder.isLocked || connectedItem != null || item.itemType != socketType) return false;
+		if (!holder.isOpen || connectedItem != null || item.itemType != socketType) return false;
 		else return true;
 	}
 
@@ -31,27 +31,16 @@ public class Socket : Interactor {
 }
 
 public abstract class Holder : MonoBehaviour {
-	public event EventHandler Connected;
-	public event EventHandler Disconnected;
-	public event EventHandler Locked;
-	public event EventHandler Unlocked;
-	public bool isLocked {get; protected set;}
+	public event EventHandler Closed;
+	public event EventHandler Open;
+	public bool isOpen {get; protected set;}
+	
+	public event EventHandler Inactive;
+	public event EventHandler Active;
+	public bool isActive {get; protected set;}
 
 	public abstract void Connect(Item item);
 	public abstract void Disconnect();
-	public abstract void Lock();
-	public abstract void Unlock();
-
-	protected void OnConnect() {
-		if (Connected != null) Connected();
-	}
-	protected void OnDisconnect() {
-		if (Disconnected != null) Disconnected();
-	}
-	protected void OnLock() {
-		if (Locked != null) Locked();
-	}
-	protected void OnUnlock() {
-		if (Unlocked != null) Unlocked();
-	}
+	public abstract void Activate();
+	public abstract void Deactivate();
 }
