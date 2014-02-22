@@ -4,38 +4,49 @@ using System.Collections;
 public class TankHolder : Holder {
 	public GasInterchange interchange;
 	public string channel = "None";
+	public Animator animator;
 
 	Tank connectedTank;
 
-	public override void Connect(Item item) {
-		if (animation.isPlaying) return;
-		if (!isOpen) return;
-
-		connectedTank = item.GetComponent<Tank>();
-		if (connectedTank == null)
-			throw new MissingComponentException("Tank holder was expecting a tank component");
-		else {
-			isOpen = false;
-			animation.Play("Close");
+	void Start() {
+		if (!socket) {
+			enabled = false; return;
 		}
+
+		socket.Connected += Connect;
+		socket.Disconnected += Disconnect;
+	}
+
+	public override void Connect(Item item) {
+		connectedTank = item.GetComponent<Tank>();
+		//Close();
 	}
 
 	public override void Disconnect() {
-		if (animation.isPlaying) return;
-		if (isOpen || isActive) return;
-
 		connectedTank = null;
 	}
 
+	public override void Close() {
+		animator.SetBool("toOpen", false);
+	}
+
+	public override void Open() {
+		animator.SetBool("toOpen", true);
+	}
+
 	public override void Activate() {
-		if (isOpen || connectedTank == null) return;
+		if (_isActivated || !animator.GetCurrentAnimatorStateInfo(0).IsName("IdleClosed")) return;
 		interchange.AddTank(connectedTank, channel);
-		isOpen = true;
+		isActivated = true;
 	}
 
 	public override void Deactivate() {
-		if (!isOpen || connectedTank == null) return;
+		if (!_isActivated) return;
 		interchange.RemoveTank(connectedTank, channel);
-		isOpen = false;
+		isActivated = false;
 	}
+
+	#region Event Functions
+
+	#endregion
 }

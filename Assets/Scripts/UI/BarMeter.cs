@@ -2,28 +2,34 @@
 using System.Collections;
 
 public class BarMeter : MonoBehaviour {
+	public Vector2 valueRange = new Vector2(0f, 1f);
+	public Vector2 sliderRange = new Vector2(.1f, 1f);
+
 	public UILabel valueLabel;
 	public UISlider slider;
-	
-	public float minValue = .1f;
-	public float barHeight = 10f;
+
+	float maxHeight;
+	float slope;
 
 	void Start() {
-		barHeight = slider.fullSize.y;
-		slider = GetComponent<UISlider>();
+		if (!valueLabel || !slider) {
+			enabled = false;
+			return;
+		}
+
+		maxHeight = slider.fullSize.y;
+		slope = (sliderRange.y-sliderRange.x)/(valueRange.y-valueRange.x);
 	}
 
 	public float Value {
 		set {
-			float clampValue = Mathf.Clamp(Mathf.Sqrt(value), minValue, 1f);
+			float clampedValue = Mathf.Clamp(Mathf.Sqrt((value-valueRange.x)*slope), sliderRange.x, sliderRange.y);
 
-			slider.sliderValue = clampValue;
-			TweenPosition.Begin(valueLabel.gameObject, .4f, new Vector3(0f, barHeight*clampValue, 0f));
+			slider.sliderValue = clampedValue;
+			TweenPosition.Begin(valueLabel.gameObject, .4f, new Vector3(0f, maxHeight*clampedValue, 0f));
 
-			if (value >= .995f)
-				valueLabel.text = "1.0";
-			else 
-				valueLabel.text = string.Format(".{0}", Mathf.FloorToInt(value*100f));
+			if (value >= .995f) valueLabel.text = "1.0";
+			else valueLabel.text = string.Format(".{0}", Mathf.FloorToInt(value*100f));
 		}
 	}
 }

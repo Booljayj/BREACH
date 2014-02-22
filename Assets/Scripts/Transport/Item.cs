@@ -22,6 +22,8 @@
 using UnityEngine;
 using System.Collections;
 
+public delegate void ItemHandler(Item item);
+
 [RequireComponent(typeof(Rigidbody))]
 public class Item : Interactor {
 	public enum Type {Tank, Scrubber, Cell};
@@ -29,59 +31,48 @@ public class Item : Interactor {
 
 	public override void Interact(Hands hands) {
 		hands.held = this;
-		Debug.Log("Picking up "+name);
+//		Debug.Log("Picking up "+name);
 
-		foreach (Transform child in transform) {
-			if (child.collider != null) {
-				Physics.IgnoreCollision(child.collider, hands.transform.parent.collider);
-			}
-		}
-		Debug.Log("Ignoring collision between "+hands.transform.parent.name+" and "+name);
 		transform.parent = hands.transform;
 		rigidbody.useGravity = false;
 
 		hands.joint.connectedBody = rigidbody;
 		hands.joint.SetTargetRotationLocal(Quaternion.identity, transform.localRotation);
-
-//		joint = hands.gameObject.AddComponent<SpringJoint>();
-//		joint.spring = 50f;
-//		joint.damper = .9f;
-//		joint.maxDistance = .01f;
-//		joint.connectedBody = rigidbody;
-//		joint.connectedAnchor = Vector3.zero;
-//		joint.anchor = Vector3.zero;
+		
+		IgnoreCollision(hands.transform.parent.gameObject, true);
 
 		hands.next = NextInteract;
 	}
 
 	public bool NextInteract(Hands hands) {
 		hands.held = null;
-		Debug.Log("Dropping "+name);
+//		Debug.Log("Dropping "+name);
+
+		transform.parent = null;
+		rigidbody.useGravity = true;
+
+		hands.joint.connectedBody = null;
+		rigidbody.AddForce(hands.transform.parent.GetComponent<CharacterController>().velocity + rigidbody.velocity + hands.transform.forward*.2f, ForceMode.VelocityChange);
 
 		if (hands.interactor != null) {
 			Socket socket = hands.interactor.GetComponent<Socket>();
 			if (socket != null && socket.CanConnectItem(this)) {
 				socket.ConnectItem(this);
 			}
+			IgnoreCollision(hands.transform.parent.gameObject, false);
+		} else {
+			IgnoreCollision(hands.transform.parent.gameObject, false);
 		}
-
-		foreach (Transform child in transform) {
-			if (child.collider != null) {
-				Physics.IgnoreCollision(child.collider, hands.transform.parent.collider, false);
-			}
-		}
-		transform.parent = null;
-		rigidbody.useGravity = true;
-
-		hands.joint.connectedBody = null;
-
-		rigidbody.AddForce(hands.transform.parent.GetComponent<CharacterController>().velocity + rigidbody.velocity + hands.transform.forward*.2f, ForceMode.VelocityChange);
 
 		return true;
 	}
 
-//	void Update() {
-//		Debug.Log(rigidbody.velocity.ToString());
-//	}
+	public void IgnoreCollision(GameObject obj, bool on) {
+		foreach (Transform child in transform) {
+			if (child.collider) {
+				Physics.IgnoreCollision(child.collider, obj.collider, on);
+			}
+		}
+	}
 }
 

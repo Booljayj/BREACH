@@ -9,11 +9,8 @@ public class RoomViewer : MonoBehaviour {
 	public GuageMeter pressure;
 	public GuageMeter temperature;
 
-	List<KeyValuePair<string, float>> gases;
-	float pressureValue;
-	float temperatureValue;
-
-	void Start() {
+	void OnEnable() {
+		Debug.Log("Enabled");
 		//connect the Refresh method to any changed events in the room.
 		if (room == null) {
 			enabled = false;
@@ -21,6 +18,10 @@ public class RoomViewer : MonoBehaviour {
 		}
 
 		StartCoroutine(Refresh());
+	}
+
+	void OnDisable() {
+		StopAllCoroutines();
 	}
 
 	//Using update for now, but should switch to an async Refresh method

@@ -1,0 +1,276 @@
+fileFormatVersion: 2
+guid: a3a0db85d9e784be09e68695c4b54d46
+ModelImporter:
+  serializedVersion: 16
+  fileIDToRecycleName:
+    100000: Circle
+    100002: Circle_001
+    100004: Circle_002
+    100006: Circle_003
+    100008: Cone
+    100010: Cylinder
+    100012: Cylinder_001
+    100014: Tank_Mesh
+    100016: //RootNode
+    100018: Arm_L
+    100020: Arm_R
+    100022: HolderBase
+    100024: Lock_B
+    100026: Lock_M
+    100028: Lock_T
+    100030: Top
+    400000: Circle
+    400002: Circle_001
+    400004: Circle_002
+    400006: Circle_003
+    400008: Cone
+    400010: Cylinder
+    400012: Cylinder_001
+    400014: Tank_Mesh
+    400016: //RootNode
+    400018: Arm_L
+    400020: Arm_R
+    400022: HolderBase
+    400024: Lock_B
+    400026: Lock_M
+    400028: Lock_T
+    400030: Top
+    2300000: Circle
+    2300002: Circle_001
+    2300004: Circle_002
+    2300006: Circle_003
+    2300008: Cone
+    2300010: Cylinder
+    2300012: Cylinder_001
+    2300014: Tank_Mesh
+    2300016: Arm_L
+    2300018: Arm_R
+    2300020: HolderBase
+    2300022: Lock_B
+    2300024: Lock_M
+    2300026: Lock_T
+    2300028: Top
+    2300030: //RootNode
+    3300000: Circle
+    3300002: Circle_001
+    3300004: Circle_002
+    3300006: Circle_003
+    3300008: Cone
+    3300010: Cylinder
+    3300012: Cylinder_001
+    3300014: Tank_Mesh
+    3300016: Arm_L
+    3300018: Arm_R
+    3300020: HolderBase
+    3300022: Lock_B
+    3300024: Lock_M
+    3300026: Lock_T
+    3300028: Top
+    3300030: //RootNode
+    4300000: Cylinder_001
+    4300002: Cylinder
+    4300004: Cone
+    4300006: Circle_003
+    4300008: Circle_002
+    4300010: Circle_001
+    4300012: Circle
+    4300014: Tank_Mesh
+    4300016: HolderBase
+    4300018: Top
+    4300020: Arm_L
+    4300022: Arm_R
+    4300024: Lock_T
+    4300026: Lock_M
+    4300028: Lock_B
+    7400000: IdleOpen
+    7400002: Close
+    7400004: IdleClosed
+    9500000: //RootNode
+    11100000: //RootNode
+  materials:
+    importMaterials: 0
+    materialName: 0
+    materialSearch: 1
+  animations:
+    legacyGenerateAnimations: 4
+    bakeSimulation: 0
+    optimizeGameObjects: 0
+    animationCompression: 3
+    animationRotationError: .5
+    animationPositionError: .5
+    animationScaleError: .5
+    animationWrapMode: 0
+    extraExposedTransformPaths: []
+    clipAnimations:
+    - serializedVersion: 16
+      name: IdleOpen
+      takeName: Default Take
+      firstFrame: 0
+      lastFrame: 6
+      wrapMode: 0
+      orientationOffsetY: 0
+      level: 0
+      cycleOffset: 0
+      loop: 0
+      loopTime: 0
+      loopBlend: 0
+      loopBlendOrientation: 0
+      loopBlendPositionY: 0
+      loopBlendPositionXZ: 0
+      keepOriginalOrientation: 0
+      keepOriginalPositionY: 1
+      keepOriginalPositionXZ: 0
+      heightFromFeet: 0
+      mirror: 0
+      bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
+      curves: []
+      events: []
+      transformMask:
+      - path: 
+        weight: 1
+      - path: Lock_B
+        weight: 1
+      - path: Lock_M
+        weight: 1
+      - path: Lock_T
+        weight: 1
+      - path: Top
+        weight: 1
+      - path: Top/Arm_L
+        weight: 1
+      - path: Top/Arm_R
+        weight: 1
+      maskType: 0
+      maskSource: {instanceID: 0}
+    - serializedVersion: 16
+      name: Close
+      takeName: Default Take
+      firstFrame: 6
+      lastFrame: 54
+      wrapMode: 0
+      orientationOffsetY: 0
+      level: 0
+      cycleOffset: 0
+      loop: 0
+      loopTime: 0
+      loopBlend: 0
+      loopBlendOrientation: 0
+      loopBlendPositionY: 0
+      loopBlendPositionXZ: 0
+      keepOriginalOrientation: 0
+      keepOriginalPositionY: 1
+      keepOriginalPositionXZ: 0
+      heightFromFeet: 0
+      mirror: 0
+      bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
+      curves: []
+      events:
+      - time: 1
+        functionName: AnimEnd
+        data: 
+        objectReferenceParameter: {instanceID: 0}
+        floatParameter: 0
+        intParameter: 0
+        messageOptions: 0
+      - time: 0
+        functionName: AnimBegin
+        data: 
+        objectReferenceParameter: {instanceID: 0}
+        floatParameter: 0
+        intParameter: 0
+        messageOptions: 0
+      transformMask:
+      - path: 
+        weight: 1
+      - path: Lock_B
+        weight: 1
+      - path: Lock_M
+        weight: 1
+      - path: Lock_T
+        weight: 1
+      - path: Top
+        weight: 1
+      - path: Top/Arm_L
+        weight: 1
+      - path: Top/Arm_R
+        weight: 1
+      maskType: 0
+      maskSource: {instanceID: 0}
+    - serializedVersion: 16
+      name: IdleClosed
+      takeName: Default Take
+      firstFrame: 54
+      lastFrame: 59
+      wrapMode: 0
+      orientationOffsetY: 0
+      level: 0
+      cycleOffset: 0
+      loop: 0
+      loopTime: 0
+      loopBlend: 0
+      loopBlendOrientation: 0
+      loopBlendPositionY: 0
+      loopBlendPositionXZ: 0
+      keepOriginalOrientation: 0
+      keepOriginalPositionY: 1
+      keepOriginalPositionXZ: 0
+      heightFromFeet: 0
+      mirror: 0
+      bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
+      curves: []
+      events: []
+      transformMask:
+      - path: 
+        weight: 1
+      - path: Lock_B
+        weight: 1
+      - path: Lock_M
+        weight: 1
+      - path: Lock_T
+        weight: 1
+      - path: Top
+        weight: 1
+      - path: Top/Arm_L
+        weight: 1
+      - path: Top/Arm_R
+        weight: 1
+      maskType: 0
+      maskSource: {instanceID: 0}
+    isReadable: 0
+  meshes:
+    lODScreenPercentages: []
+    globalScale: 1
+    meshCompression: 0
+    addColliders: 0
+    importBlendShapes: 0
+    swapUVChannels: 0
+    generateSecondaryUV: 0
+    useFileUnits: 1
+    optimizeMeshForGPU: 1
+    weldVertices: 1
+    secondaryUVAngleDistortion: 8
+    secondaryUVAreaDistortion: 15.000001
+    secondaryUVHardAngle: 88
+    secondaryUVPackMargin: 4
+  tangentSpace:
+    normalSmoothAngle: 30
+    splitTangentsAcrossUV: 1
+    normalImportMode: 1
+    tangentImportMode: 1
+  importAnimation: 1
+  copyAvatar: 0
+  humanDescription:
+    human: []
+    skeleton: []
+    armTwist: .5
+    foreArmTwist: .5
+    upperLegTwist: .5
+    legTwist: .5
+    armStretch: .0500000007
+    legStretch: .0500000007
+    feetSpacing: 0
+    rootMotionBoneName: HolderBase
+  lastHumanDescriptionAvatarSource: {instanceID: 0}
+  animationType: 2
+  additionalBone: 0
+  userData: 

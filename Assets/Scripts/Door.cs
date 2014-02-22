@@ -4,6 +4,7 @@ using System.Collections.Generic;
 
 [RequireComponent(typeof(Collider))]
 public class Door : MonoBehaviour {
+	#region Events
 	public event EventHandler Unsealing;
 	public event EventHandler Unsealed;
 	public event EventHandler Opening;
@@ -18,7 +19,9 @@ public class Door : MonoBehaviour {
 
 	public event EventHandler Automatic;
 	public event EventHandler Manual;
+	#endregion
 
+	#region Properties
 	private bool _isLocked;
 	public bool isLocked {
 		get {
@@ -46,11 +49,15 @@ public class Door : MonoBehaviour {
 			}
 		}
 	}
+	#endregion
 
+	#region Variables
 	private Airlock airlock;
 	private Animator animator;
 	private List<GameObject> obstructions = new List<GameObject>();
+	#endregion
 
+	#region Startup
 	void Start() {
 		airlock = GetComponent<Airlock>();
 		animator = GetComponentInChildren<Animator>();
@@ -60,6 +67,7 @@ public class Door : MonoBehaviour {
 			Closed	+= airlock.Close;
 		}
 	}
+	#endregion
 
 	#region Activation
 	public void Open() {
@@ -102,7 +110,7 @@ public class Door : MonoBehaviour {
 
 	#region Proximity
 	void OnTriggerEnter(Collider other) {
-		Debug.Log("Obstruction detected");
+		//Debug.Log("Obstruction detected");
 		if (other != null) {
 			obstructions.Add(other.gameObject);
 		}
