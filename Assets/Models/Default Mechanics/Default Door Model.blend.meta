@@ -1,0 +1,150 @@
+fileFormatVersion: 2
+guid: d757d5020efaa441199a7b0e813552a1
+ModelImporter:
+  serializedVersion: 16
+  fileIDToRecycleName:
+    100000: //RootNode
+    100002: Door_L
+    100004: Door_R
+    100006: Lock_Bottom
+    100008: Lock_Top
+    100010: LockRing_Bottom
+    100012: LockRing_Top
+    100014: Window_L
+    100016: Window_R
+    400000: //RootNode
+    400002: Door_L
+    400004: Door_R
+    400006: Lock_Bottom
+    400008: Lock_Top
+    400010: LockRing_Bottom
+    400012: LockRing_Top
+    400014: Window_L
+    400016: Window_R
+    2300000: //RootNode
+    2300002: Door_L
+    2300004: Door_R
+    2300006: Lock_Bottom
+    2300008: Lock_Top
+    2300010: LockRing_Bottom
+    2300012: LockRing_Top
+    2300014: Window_L
+    2300016: Window_R
+    3300000: //RootNode
+    3300002: Door_L
+    3300004: Door_R
+    3300006: Lock_Bottom
+    3300008: Lock_Top
+    3300010: LockRing_Bottom
+    3300012: LockRing_Top
+    3300014: Window_L
+    3300016: Window_R
+    4300000: Door_Frame
+    4300002: Door_L
+    4300004: LockRing_Top
+    4300006: Lock_Top
+    4300008: Window_L
+    4300010: Door_R
+    4300012: Window_R
+    4300014: LockRing_Bottom
+    4300016: Lock_Bottom
+    7400000: Default Take
+    9500000: //RootNode
+    11100000: //RootNode
+  materials:
+    importMaterials: 0
+    materialName: 0
+    materialSearch: 1
+  animations:
+    legacyGenerateAnimations: 4
+    bakeSimulation: 0
+    optimizeGameObjects: 0
+    animationCompression: 1
+    animationRotationError: .5
+    animationPositionError: .5
+    animationScaleError: .5
+    animationWrapMode: 0
+    extraExposedTransformPaths: []
+    clipAnimations:
+    - serializedVersion: 16
+      name: Default Take
+      takeName: Default Take
+      firstFrame: 0
+      lastFrame: 95
+      wrapMode: 1
+      orientationOffsetY: 0
+      level: 0
+      cycleOffset: 0
+      loop: 0
+      loopTime: 0
+      loopBlend: 0
+      loopBlendOrientation: 0
+      loopBlendPositionY: 0
+      loopBlendPositionXZ: 0
+      keepOriginalOrientation: 0
+      keepOriginalPositionY: 1
+      keepOriginalPositionXZ: 0
+      heightFromFeet: 0
+      mirror: 0
+      bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
+      curves: []
+      events: []
+      transformMask:
+      - path: 
+        weight: 1
+      - path: Door_L
+        weight: 1
+      - path: Door_L/LockRing_Top
+        weight: 1
+      - path: Door_L/LockRing_Top/Lock_Top
+        weight: 1
+      - path: Door_L/Window_L
+        weight: 1
+      - path: Door_R
+        weight: 1
+      - path: Door_R/LockRing_Bottom
+        weight: 1
+      - path: Door_R/LockRing_Bottom/Lock_Bottom
+        weight: 1
+      - path: Door_R/Window_R
+        weight: 1
+      maskType: 0
+      maskSource: {instanceID: 0}
+    isReadable: 0
+  meshes:
+    lODScreenPercentages: []
+    globalScale: 1
+    meshCompression: 0
+    addColliders: 0
+    importBlendShapes: 0
+    swapUVChannels: 0
+    generateSecondaryUV: 0
+    useFileUnits: 1
+    optimizeMeshForGPU: 1
+    weldVertices: 1
+    secondaryUVAngleDistortion: 8
+    secondaryUVAreaDistortion: 15.000001
+    secondaryUVHardAngle: 88
+    secondaryUVPackMargin: 4
+  tangentSpace:
+    normalSmoothAngle: 60
+    splitTangentsAcrossUV: 1
+    normalImportMode: 0
+    tangentImportMode: 1
+  importAnimation: 1
+  copyAvatar: 0
+  humanDescription:
+    human: []
+    skeleton: []
+    armTwist: .5
+    foreArmTwist: .5
+    upperLegTwist: .5
+    legTwist: .5
+    armStretch: .0500000007
+    legStretch: .0500000007
+    feetSpacing: 0
+    rootMotionBoneName: 
+  lastHumanDescriptionAvatarSource: {instanceID: 0}
+  animationType: 1
+  additionalBone: 0
+  userData: 

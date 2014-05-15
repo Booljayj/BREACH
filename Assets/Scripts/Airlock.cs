@@ -4,6 +4,8 @@ using System.Collections.Generic;
 
 //An airlock is a mechanism that connects two atmospheres. It can represent a door, a hull breach, or even the valve on a gas tank.
 public class Airlock : MonoBehaviour {
+	public Messenger message;
+
 	#region Control Variables
 	public Atmosphere roomA; //first connected atmosphere
 	public Atmosphere roomB; //second connected atmosphere
@@ -48,6 +50,8 @@ public class Airlock : MonoBehaviour {
 	}
 
 	void Update() {
+		if (roomA == null || roomB == null) return;
+
 		if (roomA.Pressure >= roomB.Pressure) {
 			A1 = roomA;
 			A2 = roomB;

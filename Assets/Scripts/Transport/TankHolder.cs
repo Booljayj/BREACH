@@ -19,7 +19,7 @@ public class TankHolder : Holder {
 
 	public override void Connect(Item item) {
 		connectedTank = item.GetComponent<Tank>();
-		//Close();
+		Close();
 	}
 
 	public override void Disconnect() {
@@ -45,8 +45,4 @@ public class TankHolder : Holder {
 		interchange.RemoveTank(connectedTank, channel);
 		isActivated = false;
 	}
-
-	#region Event Functions
-
-	#endregion
 }

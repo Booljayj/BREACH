@@ -13,7 +13,6 @@ public class Socket : Interactor {
 
 	public override void Interact(Hands hands) {
 		if (!isLocked && connectedItem) {
-			Debug.Log("Disconnecting");
 			connectedItem.Interact(hands);
 			DisconnectItem(hands);
 		}
@@ -43,17 +42,19 @@ public class Socket : Interactor {
 		if (isLocked) return;
 
 		connectedItem.Interact(hands);
-		connectedItem.rigidbody.isKinematic = true;
+		connectedItem.rigidbody.isKinematic = false;
 		connectedItem = null;
 
 		OnDisconnected();
 	}
 
 	public void OnConnected() {
+		//Debug.Log("Connected");
 		if (Connected != null) Connected(connectedItem);
 	}
 
 	public void OnDisconnected() {
+		//Debug.Log("Disconnected");
 		if (Disconnected != null) Disconnected();
 	}
 }
@@ -92,28 +93,34 @@ public abstract class Holder : MonoBehaviour {
 	public abstract void Deactivate();
 	
 	public void OnOpening() {
+		Debug.Log("Opening");
 		if (Opening != null) Opening();
 	}
 	
 	public void OnOpened() {
+		Debug.Log("Opened");
 		if (Opened != null) Opened();
 		socket.isLocked = false;
 	}
 	
 	public void OnClosing() {
+		Debug.Log("Closing");
 		if (Closing != null) Closing();
 		socket.isLocked = true;
 	}
 	
 	public void OnClosed() {
+		Debug.Log("Closed");
 		if (Closed != null) Closed();
 	}
 	
 	public void OnActivate() {
+		Debug.Log("Activated");
 		if (Activated != null) Activated();
 	}
 	
 	public void OnDeactivate() {
+		Debug.Log("Deactivated");
 		if (Deactivated != null) Deactivated();
 	}
 }

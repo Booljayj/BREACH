@@ -21,6 +21,8 @@ public class Door : MonoBehaviour {
 	public event EventHandler Manual;
 	#endregion
 
+	public bool open;
+
 	#region Properties
 	private bool _isLocked;
 	public bool isLocked {
