@@ -49,6 +49,7 @@ ModelImporter:
     4300014: LockRing_Bottom
     4300016: Lock_Bottom
     7400000: Default Take
+    7400002: Default Take0
     9500000: //RootNode
     11100000: //RootNode
   materials:
@@ -59,10 +60,10 @@ ModelImporter:
     legacyGenerateAnimations: 4
     bakeSimulation: 0
     optimizeGameObjects: 0
-    animationCompression: 1
-    animationRotationError: .5
-    animationPositionError: .5
-    animationScaleError: .5
+    animationCompression: 3
+    animationRotationError: .00999999978
+    animationPositionError: .00999999978
+    animationScaleError: .00999999978
     animationWrapMode: 0
     extraExposedTransformPaths: []
     clipAnimations:
@@ -70,8 +71,52 @@ ModelImporter:
       name: Default Take
       takeName: Default Take
       firstFrame: 0
-      lastFrame: 95
+      lastFrame: 12
       wrapMode: 1
+      orientationOffsetY: 0
+      level: 0
+      cycleOffset: 0
+      loop: 0
+      loopTime: 0
+      loopBlend: 0
+      loopBlendOrientation: 0
+      loopBlendPositionY: 0
+      loopBlendPositionXZ: 0
+      keepOriginalOrientation: 0
+      keepOriginalPositionY: 1
+      keepOriginalPositionXZ: 0
+      heightFromFeet: 0
+      mirror: 0
+      bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
+      curves: []
+      events: []
+      transformMask:
+      - path: 
+        weight: 1
+      - path: Door_L
+        weight: 1
+      - path: Door_L/LockRing_Top
+        weight: 1
+      - path: Door_L/LockRing_Top/Lock_Top
+        weight: 1
+      - path: Door_L/Window_L
+        weight: 1
+      - path: Door_R
+        weight: 1
+      - path: Door_R/LockRing_Bottom
+        weight: 1
+      - path: Door_R/LockRing_Bottom/Lock_Bottom
+        weight: 1
+      - path: Door_R/Window_R
+        weight: 1
+      maskType: 0
+      maskSource: {instanceID: 0}
+    - serializedVersion: 16
+      name: Default Take0
+      takeName: Default Take
+      firstFrame: 24
+      lastFrame: 95
+      wrapMode: 0
       orientationOffsetY: 0
       level: 0
       cycleOffset: 0
@@ -145,6 +190,6 @@ ModelImporter:
     feetSpacing: 0
     rootMotionBoneName: 
   lastHumanDescriptionAvatarSource: {instanceID: 0}
-  animationType: 1
+  animationType: 2
   additionalBone: 0
   userData: 
