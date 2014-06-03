@@ -52,7 +52,7 @@ public class Item : Interactor {
 		rigidbody.useGravity = true;
 
 		hands.joint.connectedBody = null;
-		rigidbody.AddForce(hands.transform.parent.GetComponent<CharacterController>().velocity + rigidbody.velocity + hands.transform.forward*.2f, ForceMode.VelocityChange);
+		//rigidbody.AddForce(hands.transform.parent.GetComponent<CharacterController>().velocity + rigidbody.velocity + hands.transform.forward*.2f, ForceMode.VelocityChange);
 
 		if (hands.interactor != null) {
 			Socket socket = hands.interactor.GetComponent<Socket>();

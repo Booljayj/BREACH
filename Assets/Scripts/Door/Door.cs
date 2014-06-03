@@ -65,8 +65,8 @@ public class Door : MonoBehaviour {
 		animator = GetComponentInChildren<Animator>();
 
 		if (airlock != null) {
-			Opening += airlock.Open;
-			Closed	+= airlock.Close;
+			//Opening += airlock.Open;
+			//Closed	+= airlock.Close;
 		}
 	}
 	#endregion

@@ -33,7 +33,6 @@ public class DoorButton : MonoBehaviour {
 				return;
 			}
 		}
-		current = null;
 	}
 
 	void OnPress(bool isPressed) {

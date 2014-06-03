@@ -48,8 +48,10 @@ ModelImporter:
     4300012: Window_R
     4300014: LockRing_Bottom
     4300016: Lock_Bottom
-    7400000: Default Take
-    7400002: Default Take0
+    7400000: DoorIdleClosed
+    7400002: DoorOpen
+    7400004: DoorIdleOpened
+    7400006: DoorUnseal
     9500000: //RootNode
     11100000: //RootNode
   materials:
@@ -68,10 +70,10 @@ ModelImporter:
     extraExposedTransformPaths: []
     clipAnimations:
     - serializedVersion: 16
-      name: Default Take
+      name: DoorIdleClosed
       takeName: Default Take
       firstFrame: 0
-      lastFrame: 12
+      lastFrame: 1
       wrapMode: 1
       orientationOffsetY: 0
       level: 0
@@ -112,9 +114,125 @@ ModelImporter:
       maskType: 0
       maskSource: {instanceID: 0}
     - serializedVersion: 16
-      name: Default Take0
+      name: DoorOpen
       takeName: Default Take
-      firstFrame: 24
+      firstFrame: 60
+      lastFrame: 95
+      wrapMode: 0
+      orientationOffsetY: 0
+      level: 0
+      cycleOffset: 0
+      loop: 0
+      loopTime: 0
+      loopBlend: 0
+      loopBlendOrientation: 0
+      loopBlendPositionY: 0
+      loopBlendPositionXZ: 0
+      keepOriginalOrientation: 0
+      keepOriginalPositionY: 1
+      keepOriginalPositionXZ: 0
+      heightFromFeet: 0
+      mirror: 0
+      bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
+      curves: []
+      events:
+      - time: .0113960272
+        functionName: DoorOpenStart
+        data: 
+        objectReferenceParameter: {instanceID: 0}
+        floatParameter: 0
+        intParameter: 0
+        messageOptions: 0
+      - time: .991453052
+        functionName: DoorOpenEnd
+        data: 
+        objectReferenceParameter: {instanceID: 0}
+        floatParameter: 0
+        intParameter: 0
+        messageOptions: 0
+      transformMask:
+      - path: 
+        weight: 1
+      - path: Door_L
+        weight: 1
+      - path: Door_L/LockRing_Top
+        weight: 1
+      - path: Door_L/LockRing_Top/Lock_Top
+        weight: 1
+      - path: Door_L/Window_L
+        weight: 1
+      - path: Door_R
+        weight: 1
+      - path: Door_R/LockRing_Bottom
+        weight: 1
+      - path: Door_R/LockRing_Bottom/Lock_Bottom
+        weight: 1
+      - path: Door_R/Window_R
+        weight: 1
+      maskType: 0
+      maskSource: {instanceID: 0}
+    - serializedVersion: 16
+      name: DoorUnseal
+      takeName: Default Take
+      firstFrame: 0
+      lastFrame: 59
+      wrapMode: 0
+      orientationOffsetY: 0
+      level: 0
+      cycleOffset: 0
+      loop: 0
+      loopTime: 0
+      loopBlend: 0
+      loopBlendOrientation: 0
+      loopBlendPositionY: 0
+      loopBlendPositionXZ: 0
+      keepOriginalOrientation: 0
+      keepOriginalPositionY: 1
+      keepOriginalPositionXZ: 0
+      heightFromFeet: 0
+      mirror: 0
+      bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
+      curves: []
+      events:
+      - time: .0113960113
+        functionName: DoorUnsealStart
+        data: 
+        objectReferenceParameter: {instanceID: 0}
+        floatParameter: 0
+        intParameter: 0
+        messageOptions: 0
+      - time: .991452992
+        functionName: DoorUnsealEnd
+        data: 
+        objectReferenceParameter: {instanceID: 0}
+        floatParameter: 0
+        intParameter: 0
+        messageOptions: 0
+      transformMask:
+      - path: 
+        weight: 1
+      - path: Door_L
+        weight: 1
+      - path: Door_L/LockRing_Top
+        weight: 1
+      - path: Door_L/LockRing_Top/Lock_Top
+        weight: 1
+      - path: Door_L/Window_L
+        weight: 1
+      - path: Door_R
+        weight: 1
+      - path: Door_R/LockRing_Bottom
+        weight: 1
+      - path: Door_R/LockRing_Bottom/Lock_Bottom
+        weight: 1
+      - path: Door_R/Window_R
+        weight: 1
+      maskType: 0
+      maskSource: {instanceID: 0}
+    - serializedVersion: 16
+      name: DoorIdleOpened
+      takeName: Default Take
+      firstFrame: 94
       lastFrame: 95
       wrapMode: 0
       orientationOffsetY: 0
